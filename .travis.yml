@@ -1,6 +1,7 @@
 language: php
 php:
   - '5.4'
+  - '5.5'
   - '5.6'
   - '7.2'
   - hhvm # on Trusty only
@@ -13,8 +14,3 @@ notifications:
   email:
     recipients:
     - alecabreralituma2@gmail.com
-
-script:
-#Test unitario y de integracion en develop
-- mvn verify
-- mvn org.jacoco:jacoco-maven-plugin:prepare-agent verify
