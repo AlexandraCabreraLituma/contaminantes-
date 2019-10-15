@@ -1,0 +1,14 @@
+language: php
+branches:
+  only:
+  - master
+  - develop
+notifications:
+  email:
+    recipients:
+    - alecabreralituma2@gmail.com
+
+script:
+#Test unitario y de integracion en develop
+- mvn verify
+- mvn org.jacoco:jacoco-maven-plugin:prepare-agent verify
