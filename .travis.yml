@@ -9,7 +9,11 @@ notifications:
   email:
     recipients:
     - alecabreralituma2@gmail.com
+addons:
+  sonarcloud:
+    organization: "alexandracabreralituma-github"
 before_install:
   - travis_retry composer self-update
   - composer install
 script: phpunit --exclude-group FITS --bootstrap vendor/autoload.php tests
+  - sonar-scanner
