@@ -17,4 +17,4 @@ before_install:
   - composer install
 script:
   - phpunit --exclude-group FITS --bootstrap vendor/autoload.php tests
-  - sonar-scanner
+  - sonar:sonar -Dsonar.organization=alexandracabreralituma-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR
