@@ -14,3 +14,5 @@
 
 ## Tecnologías necesarias
 `Typescript` `Angular` `PHP` `PHPUnit` `Symfony` `HTML` `CSS`
+
+[![Build Status](https://travis-ci.org/AlexandraCabreraLituma/contaminantes-.svg?branch=master)](https://travis-ci.org/AlexandraCabreraLituma/contaminantes-)
