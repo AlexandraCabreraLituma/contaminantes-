@@ -16,7 +16,7 @@
 `Typescript` `Angular` `PHP` `PHPUnit` `Symfony` `HTML` `CSS`
 
 #### Travis
-[![Build Status](https://travis-ci.org/AlexandraCabreraLituma/contaminantes-.svg?branch=master)](https://travis-ci.org/AlexandraCabreraLituma/contaminantes-)
+[![Build Status](https://travis-ci.org/AlexandraCabreraLituma/contaminantes-.svg?branch=develop)](https://travis-ci.org/AlexandraCabreraLituma/contaminantes-)
 #### Sonar
 ![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=245299b2696137cdf3c18a4f8c8a06f52e054176&metric=alert_status)
 #### Better Code
