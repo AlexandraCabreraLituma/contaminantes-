@@ -1,13 +1,13 @@
 <?php
 
-namespace App\\Entity;
+namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * ObservationTemplate
  *
- * @ORM\Table(name="observation_template", indexes={@ORM\Index(name="IDX_167CDB541624BCD2", columns={"procedure_id"}), @ORM\Index(name="IDX_167CDB54427EB8A5", columns={"request_id"})})
+ * @ORM\Table(name="observation_template")
  * @ORM\Entity
  */
 class ObservationTemplate
@@ -23,31 +23,25 @@ class ObservationTemplate
     private $obsTemplateId;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="procedure_id", type="string", length=100, nullable=false)
+     */
+    private $procedureId;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="request_id", type="integer", nullable=false)
+     */
+    private $requestId;
+
+    /**
      * @var string|null
      *
      * @ORM\Column(name="observation_template", type="text", nullable=true)
      */
     private $observationTemplate;
-
-    /**
-     * @var \Procedure
-     *
-     * @ORM\ManyToOne(targetEntity="Procedure")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="procedure_id", referencedColumnName="procedure_id")
-     * })
-     */
-    private $procedure;
-
-    /**
-     * @var \Request
-     *
-     * @ORM\ManyToOne(targetEntity="Request")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="request_id", referencedColumnName="request_id")
-     * })
-     */
-    private $request;
 
 
 }

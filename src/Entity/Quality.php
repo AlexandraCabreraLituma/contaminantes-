@@ -1,13 +1,13 @@
 <?php
 
-namespace App\\Entity;
+namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Quality
  *
- * @ORM\Table(name="quality", indexes={@ORM\Index(name="IDX_7CB20B101409DD88", columns={"observation_id"})})
+ * @ORM\Table(name="quality")
  * @ORM\Entity
  */
 class Quality
@@ -51,14 +51,11 @@ class Quality
     private $qualityType;
 
     /**
-     * @var \Observation
+     * @var int
      *
-     * @ORM\ManyToOne(targetEntity="Observation")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="observation_id", referencedColumnName="observation_id")
-     * })
+     * @ORM\Column(name="observation_id", type="integer", nullable=false)
      */
-    private $observation;
+    private $observationId;
 
 
 }

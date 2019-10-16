@@ -1,6 +1,6 @@
 <?php
 
-namespace App\\Entity;
+namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -43,67 +43,5 @@ class Procedure
      */
     private $smlFile;
 
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="FeatureOfInterest", inversedBy="procedure")
-     * @ORM\JoinTable(name="proc_foi",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="procedure_id", referencedColumnName="procedure_id")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="feature_of_interest_id", referencedColumnName="feature_of_interest_id")
-     *   }
-     * )
-     */
-    private $featureOfInterest;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Offering", inversedBy="procedure")
-     * @ORM\JoinTable(name="proc_off",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="procedure_id", referencedColumnName="procedure_id")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="offering_id", referencedColumnName="offering_id")
-     *   }
-     * )
-     */
-    private $offering;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Phenomenon", inversedBy="procedure")
-     * @ORM\JoinTable(name="proc_phen",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="procedure_id", referencedColumnName="procedure_id")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="phenomenon_id", referencedColumnName="phenomenon_id")
-     *   }
-     * )
-     */
-    private $phenomenon;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Procedure", mappedBy="childProcedure")
-     */
-    private $parentProcedure;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->featureOfInterest = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->offering = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->phenomenon = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->parentProcedure = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
 }

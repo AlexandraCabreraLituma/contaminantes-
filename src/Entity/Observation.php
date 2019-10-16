@@ -1,13 +1,13 @@
 <?php
 
-namespace App\\Entity;
+namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Observation
  *
- * @ORM\Table(name="observation", uniqueConstraints={@ORM\UniqueConstraint(name="observation_time_stamp_procedure_id_feature_of_interest_id__key", columns={"time_stamp", "procedure_id", "feature_of_interest_id", "phenomenon_id"})}, indexes={@ORM\Index(name="phenobstable", columns={"phenomenon_id"}), @ORM\Index(name="spatialvalueobstableindex", columns={"spatial_value"}), @ORM\Index(name="numericvalueobstable", columns={"numeric_value"}), @ORM\Index(name="timeindexobstable", columns={"time_stamp", "procedure_id", "feature_of_interest_id", "phenomenon_id"}), @ORM\Index(name="procobstable", columns={"procedure_id"}), @ORM\Index(name="foiobstable", columns={"feature_of_interest_id"}), @ORM\Index(name="textvalueobstable", columns={"text_value"})})
+ * @ORM\Table(name="observation", uniqueConstraints={@ORM\UniqueConstraint(name="observation_time_stamp_procedure_id_feature_of_interest_id__key", columns={"time_stamp", "procedure_id", "feature_of_interest_id", "phenomenon_id"})}, indexes={@ORM\Index(name="foiobstable", columns={"feature_of_interest_id"}), @ORM\Index(name="numericvalueobstable", columns={"numeric_value"})})
  * @ORM\Entity
  */
 class Observation
@@ -28,6 +28,27 @@ class Observation
      * @ORM\Column(name="time_stamp", type="datetimetz", nullable=false)
      */
     private $timeStamp;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="procedure_id", type="string", length=100, nullable=false)
+     */
+    private $procedureId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="feature_of_interest_id", type="string", length=100, nullable=false)
+     */
+    private $featureOfInterestId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="phenomenon_id", type="string", length=100, nullable=false)
+     */
+    private $phenomenonId;
 
     /**
      * @var string|null
@@ -84,36 +105,6 @@ class Observation
      * @ORM\Column(name="id_mysql", type="integer", nullable=true)
      */
     private $idMysql;
-
-    /**
-     * @var \FeatureOfInterest
-     *
-     * @ORM\ManyToOne(targetEntity="FeatureOfInterest")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="feature_of_interest_id", referencedColumnName="feature_of_interest_id")
-     * })
-     */
-    private $featureOfInterest;
-
-    /**
-     * @var \Phenomenon
-     *
-     * @ORM\ManyToOne(targetEntity="Phenomenon")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="phenomenon_id", referencedColumnName="phenomenon_id")
-     * })
-     */
-    private $phenomenon;
-
-    /**
-     * @var \Procedure
-     *
-     * @ORM\ManyToOne(targetEntity="Procedure")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="procedure_id", referencedColumnName="procedure_id")
-     * })
-     */
-    private $procedure;
 
 
 }

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\\Entity;
+namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Request
  *
- * @ORM\Table(name="request", indexes={@ORM\Index(name="IDX_3B978F9F8EDF74F0", columns={"offering_id"})})
+ * @ORM\Table(name="request")
  * @ORM\Entity
  */
 class Request
@@ -21,6 +21,13 @@ class Request
      * @ORM\SequenceGenerator(sequenceName="request_request_id_seq", allocationSize=1, initialValue=1)
      */
     private $requestId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="offering_id", type="string", length=100, nullable=false)
+     */
+    private $offeringId;
 
     /**
      * @var string
@@ -42,16 +49,6 @@ class Request
      * @ORM\Column(name="end_lease", type="datetimetz", nullable=false)
      */
     private $endLease;
-
-    /**
-     * @var \Offering
-     *
-     * @ORM\ManyToOne(targetEntity="Offering")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="offering_id", referencedColumnName="offering_id")
-     * })
-     */
-    private $offering;
 
 
 }

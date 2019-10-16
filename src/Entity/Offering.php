@@ -1,6 +1,6 @@
 <?php
 
-namespace App\\Entity;
+namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -50,43 +50,5 @@ class Offering
      */
     private $allFois = false;
 
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Procedure", mappedBy="offering")
-     */
-    private $procedure;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="CompositePhenomenon", mappedBy="offering")
-     */
-    private $compositePhenomenon;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="FeatureOfInterest", mappedBy="offering")
-     */
-    private $featureOfInterest;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Phenomenon", mappedBy="offering")
-     */
-    private $phenomenon;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->procedure = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->compositePhenomenon = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->featureOfInterest = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->phenomenon = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
 }

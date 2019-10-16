@@ -1,13 +1,13 @@
 <?php
 
-namespace App\\Entity;
+namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Phenomenon
  *
- * @ORM\Table(name="phenomenon", indexes={@ORM\Index(name="IDX_2F24836A8B1C1373", columns={"composite_phenomenon_id"})})
+ * @ORM\Table(name="phenomenon")
  * @ORM\Entity
  */
 class Phenomenon
@@ -46,6 +46,13 @@ class Phenomenon
     /**
      * @var string|null
      *
+     * @ORM\Column(name="composite_phenomenon_id", type="string", length=100, nullable=true)
+     */
+    private $compositePhenomenonId;
+
+    /**
+     * @var string|null
+     *
      * @ORM\Column(name="om_application_schema_link", type="text", nullable=true)
      */
     private $omApplicationSchemaLink;
@@ -57,45 +64,5 @@ class Phenomenon
      */
     private $factorCorreccion;
 
-    /**
-     * @var \CompositePhenomenon
-     *
-     * @ORM\ManyToOne(targetEntity="CompositePhenomenon")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="composite_phenomenon_id", referencedColumnName="composite_phenomenon_id")
-     * })
-     */
-    private $compositePhenomenon;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Procedure", mappedBy="phenomenon")
-     */
-    private $procedure;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Offering", inversedBy="phenomenon")
-     * @ORM\JoinTable(name="phen_off",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="phenomenon_id", referencedColumnName="phenomenon_id")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="offering_id", referencedColumnName="offering_id")
-     *   }
-     * )
-     */
-    private $offering;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->procedure = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->offering = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\\Entity;
+namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -29,27 +29,5 @@ class CompositePhenomenon
      */
     private $compositePhenomenonDescription;
 
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Offering", inversedBy="compositePhenomenon")
-     * @ORM\JoinTable(name="com_phen_off",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="composite_phenomenon_id", referencedColumnName="composite_phenomenon_id")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="offering_id", referencedColumnName="offering_id")
-     *   }
-     * )
-     */
-    private $offering;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->offering = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
 }

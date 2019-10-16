@@ -1,6 +1,6 @@
 <?php
 
-namespace App\\Entity;
+namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -57,35 +57,5 @@ class FeatureOfInterest
      */
     private $schemaLink;
 
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Procedure", mappedBy="featureOfInterest")
-     */
-    private $procedure;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Offering", inversedBy="featureOfInterest")
-     * @ORM\JoinTable(name="foi_off",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="feature_of_interest_id", referencedColumnName="feature_of_interest_id")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="offering_id", referencedColumnName="offering_id")
-     *   }
-     * )
-     */
-    private $offering;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->procedure = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->offering = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
 }
