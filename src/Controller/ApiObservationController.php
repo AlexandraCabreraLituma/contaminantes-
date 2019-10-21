@@ -42,7 +42,6 @@ class ApiObservationController extends AbstractController
         $query->setParameter('timeStampInitial',$data['initial_time_stamp']);
         $query->setParameter('timeStampFinal',$data['final_time_stamp']);
 
-
         /** * @var Observation[] $observations */
         $observations = $query->getResult();
 
@@ -51,10 +50,6 @@ class ApiObservationController extends AbstractController
             : new JsonResponse(
                 ['observations'=>$observations],
                 Response::HTTP_OK);
-    }
-
-    public function prueba(string $cadena){
-        return str_ireplace($cadena, 'urn:ogc:def:phenomenon:OGC:1.0.30:','');
     }
 
     /**
