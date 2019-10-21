@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * Observation
@@ -10,8 +12,54 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="observation", uniqueConstraints={@ORM\UniqueConstraint(name="observation_time_stamp_procedure_id_feature_of_interest_id__key", columns={"time_stamp", "procedure_id", "feature_of_interest_id", "phenomenon_id"})}, indexes={@ORM\Index(name="foiobstable", columns={"feature_of_interest_id"}), @ORM\Index(name="numericvalueobstable", columns={"numeric_value"})})
  * @ORM\Entity
  */
-class Observation
+class Observation implements \JsonSerializable
 {
+    /**
+     * @param \DateTime $timeStamp
+     */
+    public function setTimeStamp(\DateTime $timeStamp): void
+    {
+        $this->timeStamp = $timeStamp;
+    }
+
+    /**
+     * @param string $phenomenonId
+     */
+    public function setPhenomenonId(string $phenomenonId): void
+    {
+        $this->phenomenonId = $phenomenonId;
+    }
+
+    /**
+     * @param string|null $valor
+     */
+    public function setValor(?string $valor): void
+    {
+        $this->valor = $valor;
+    }
+    /**
+     * @return \DateTime
+     */
+    public function getTimeStamp(): \DateTime
+    {
+        return $this->timeStamp;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhenomenonId(): string
+    {
+        return $this->phenomenonId;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getValor(): ?string
+    {
+        return $this->valor;
+    }
     /**
      * @var int
      *
@@ -105,6 +153,29 @@ class Observation
      * @ORM\Column(name="id_mysql", type="integer", nullable=true)
      */
     private $idMysql;
+
+
+    /**
+     * Specify data which should be serialized to JSON
+     *
+     * @link   http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since  5.4.0
+     */
+    public function jsonSerialize():array
+    {
+
+        return array(
+            'time_stamp'        => $this->timeStamp,
+            'phenomenonId'      => $this->phenomenonId,
+            'valor'             => $this->valor
+        );
+
+    }
+
+
+
 
 
 }
