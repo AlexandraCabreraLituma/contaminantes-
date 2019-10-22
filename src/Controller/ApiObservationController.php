@@ -53,6 +53,38 @@ class ApiObservationController extends AbstractController
     }
 
     /**
+     * @param Request $request
+     * @return Response
+     * @Route(path="/search/contaminante", name="search_contaminantes", methods={"POST"})
+     */
+    public function searchAdvanceObservationByContaminante(Request $request): Response{
+        $em = $this->getDoctrine()->getManager();
+        $dataRequest = $request->getContent();
+        $data = json_decode($dataRequest, true);
+
+        $query = $em->createQuery('SELECT observationO3.timeStamp, observationO3.valor FROM 
+                                                  App\Entity\Observation observationO3  
+                                                  where observationO3.timeStamp>= :timeStampInitial 
+                                                  and observationO3.timeStamp<= :timeStampFinal
+                                                  and observationO3.phenomenonId LIKE :O3Id                                                
+                                                  ');
+        $query->setParameter('timeStampInitial',$data['initial_time_stamp']);
+        $query->setParameter('timeStampFinal',$data['final_time_stamp']);
+        $query->setParameter('O3Id','%'.$data['O3Id'].'%');
+        //$query->setParameter('COId','%'.$data['COId'].'%');
+
+        /** * @var Observation[] $observations */
+        $observations = $query->getResult();
+
+        return (empty($observations))
+            ? $this->error404()
+            : new JsonResponse(
+                ['observations'=>$observations],
+                Response::HTTP_OK);
+    }
+
+
+    /**
      * @return JsonResponse
      ** @codeCoverageIgnore
      */
