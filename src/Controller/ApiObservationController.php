@@ -83,40 +83,50 @@ class ApiObservationController extends AbstractController
                 Response::HTTP_OK);
     }
 
-
-
     /**
-     * @return JsonResponse
-     ** @codeCoverageIgnore
+     * @param Request $request
+     * @return Response
+     * @Route(path="/search/stadistic", name="search_stadistic", methods={"POST"})
      */
-    private function error422() : JsonResponse
-    {
-        $mensaje=[
-            'code'=> Response::HTTP_UNPROCESSABLE_ENTITY,
-            'mensaje' => 'Unprocessable entity is left out'
-        ];
-        return new JsonResponse(
-            $mensaje,
-            Response::HTTP_UNPROCESSABLE_ENTITY
-        );
+    public function searchAdvanceObservationStadistic(Request $request): Response{
+        $em = $this->getDoctrine()->getManager();
+        $dataRequest = $request->getContent();
+        $data = json_decode($dataRequest, true);
+
+        $query = $em->createQuery('SELECT observation.phenomenonId, max(observation.valor) as maximo, min(observation.valor) as minimo, avg(observation.valor) as promedio  FROM 
+                                                  App\Entity\Observation observation  
+                                                  where observation.timeStamp>= :timeStampInitial 
+                                                  and observation.timeStamp<= :timeStampFinal
+                                                  and (observation.phenomenonId LIKE :O3Id
+                                                  or observation.phenomenonId LIKE :SO2Id
+                                                  or observation.phenomenonId LIKE :PM2_5Id
+                                                  or observation.phenomenonId LIKE :COId
+                                                  or observation.phenomenonId LIKE :NO2Id
+                                                  )                                                
+                                                  group by observation.phenomenonId');
+        $query->setParameter('timeStampInitial',$data['initial_time_stamp']);
+        $query->setParameter('timeStampFinal',$data['final_time_stamp']);
+        $query->setParameter('O3Id','%'.$data['O3Id'].'%');
+        $query->setParameter('SO2Id','%'.$data['SO2Id'].'%');
+        $query->setParameter('PM2_5Id','%'.$data['PM2_5Id'].'%');
+        $query->setParameter('COId','%'.$data['COId'].'%');
+        $query->setParameter('NO2Id','%'.$data['NO2Id'].'%');
+
+
+
+        /** * @var Observation[] $observations */
+        $observations = $query->getResult();
+
+        return (empty($observations))
+            ? $this->error404()
+            : new JsonResponse(
+                ['observations'=>$observations],
+                Response::HTTP_OK);
     }
 
 
-    /**
-     * @return JsonResponse
-     ** @codeCoverageIgnore
-     */
-    private function error400() : JsonResponse
-    {
-        $mensaje=[
-            'code'=> Response::HTTP_BAD_REQUEST,
-            'mensaje' => 'Bad Request User do not exists'
-        ];
-        return new JsonResponse(
-            $mensaje,
-            Response::HTTP_BAD_REQUEST
-        );
-    }
+
+
     /**
      * @return JsonResponse
      ** @codeCoverageIgnore
