@@ -84,6 +84,7 @@ class ApiObservationController extends AbstractController
     }
 
 
+
     /**
      * @return JsonResponse
      ** @codeCoverageIgnore
