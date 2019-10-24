@@ -138,7 +138,7 @@ class ApiObservationController extends AbstractController
                                     FROM App\Entity\Observation observation 
                                     where observation.timeStamp>= :timeStampInitial 
                                         and observation.timeStamp<= :timeStampFinal 
-                                        and observation.phenomenonId NOT LIKE CO ');
+                                    group by observation.phenomenonId');
         $query->setParameter('timeStampInitial',$data['initial_time_stamp']);
         $query->setParameter('timeStampFinal',$data['final_time_stamp']);
 
@@ -170,6 +170,20 @@ class ApiObservationController extends AbstractController
             : new JsonResponse(
                 ['observations'=>$observations],
                 Response::HTTP_OK);
+    }
+
+    /**
+     * @Route(path="/{id}", name="options_project", methods={ Request::METHOD_OPTIONS })
+     * @param Observation|null $observation
+     * @return Response
+     */
+    public function optionsObservation(?Observation $observation = null):Response{
+
+        if (null === $observation) {
+            return $this->error404();
+        }
+        $options="POST,PATCH,GET,PUT,DELETE,OPTIONS";
+        return new JsonResponse(null,Response::HTTP_OK ,["Allow" => $options]);
     }
 
 
