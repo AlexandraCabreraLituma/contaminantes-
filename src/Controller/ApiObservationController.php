@@ -124,7 +124,67 @@ class ApiObservationController extends AbstractController
                 Response::HTTP_OK);
     }
 
+    /**
+     * @param Request $request
+     * @return Response
+     * @Route(path="/search/ICA", name="search_ICA", methods={"POST"})
+     */
+    public function searchICA(Request $request): Response{
+        $em = $this->getDoctrine()->getManager();
+        $dataRequest = $request->getContent();
+        $data = json_decode($dataRequest, true);
 
+        $query = $em->createQuery('SELECT observation.phenomenonId , avg(observation.valor) as promedio  
+                                    FROM App\Entity\Observation observation 
+                                    where observation.timeStamp>= :timeStampInitial 
+                                        and observation.timeStamp<= :timeStampFinal 
+                                    group by observation.phenomenonId');
+        $query->setParameter('timeStampInitial',$data['initial_time_stamp']);
+        $query->setParameter('timeStampFinal',$data['final_time_stamp']);
+
+        /** * @var Observation[] $observations */
+        $observations = $query->getResult();
+
+        return (empty($observations))
+            ? $this->error404()
+            : new JsonResponse(
+                ['observations'=>$observations],
+                Response::HTTP_OK);
+    }
+
+    /**
+     * @Route(path="/MaxHour", name="max_hour", methods={ Request::METHOD_GET })
+     * @return Response
+     */
+    public function getCMaxHour():Response{
+        $em = $this->getDoctrine()->getManager();
+
+        $query = $em->createQuery('SELECT max(observation.timeStamp) as maxHour FROM 
+                                                  App\Entity\Observation observation');
+
+        /** * @var Observation[] $observations */
+        $observations = $query->getResult();
+
+        return (empty($observations))
+            ? $this->error404()
+            : new JsonResponse(
+                ['observations'=>$observations],
+                Response::HTTP_OK);
+    }
+
+    /**
+     * @Route(path="/{id}", name="options_project", methods={ Request::METHOD_OPTIONS })
+     * @param Observation|null $observation
+     * @return Response
+     */
+    public function optionsObservation(?Observation $observation = null):Response{
+
+        if (null === $observation) {
+            return $this->error404();
+        }
+        $options="POST,PATCH,GET,PUT,DELETE,OPTIONS";
+        return new JsonResponse(null,Response::HTTP_OK ,["Allow" => $options]);
+    }
 
 
     /**
