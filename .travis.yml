@@ -16,7 +16,8 @@ before_install:
   - travis_retry composer self-update
   - composer install
 script:
+  - /vendor/bin/phpunit
   - sonar-scanner
 test:
   override:
-    - vendor/bin/phpunit --configuration phpunit.xml
+    - vendor/bin/phpunit --configuration phpunit.xml.dist
