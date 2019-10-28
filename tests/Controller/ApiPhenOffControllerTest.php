@@ -8,10 +8,6 @@
 
 namespace App\Tests\Controller;
 
-use DateTime;
-
-
-use App\Controller\ApiObservationController;
 use App\Controller\ApiPhenOffController;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -39,13 +35,12 @@ class ApiPhenOffControllerTest extends WebTestCase
     }
 
     /**
-     * Implements getCWeightPolar
+     * Implements testGetCWeightPolar200
      *
      * @covers ::getCWeightPolar
      */
-    public function testgetCWeightPolar(): void
+    public function testGetCWeightPolar200(): void
     {
-        $phenomenonId="urn:ogc:def:phenomenon:OGC:1.0.30:SO2";
         $id = 'SO2';
         self::$client->request(
             Request::METHOD_GET,
@@ -63,5 +58,22 @@ class ApiPhenOffControllerTest extends WebTestCase
 
     }
 
+    /**
+     * Implements testGetCWeightPolar404
+     *
+     * @covers ::getCWeightPolar
+     */
+    public function testGetCWeightPolar404(): void
+    {
+        $id = 'asdasd';
+        self::$client->request(
+            Request::METHOD_GET,
+            ApiPhenOffController::PHENOFF_API_PATH . ApiPhenOffController::WEIGHTPOLAR . '/' .$id
+        );
+        self::assertEquals(
+            Response::HTTP_NOT_FOUND,
+            self::$client->getResponse()->getStatusCode()
+        );
 
+    }
 }

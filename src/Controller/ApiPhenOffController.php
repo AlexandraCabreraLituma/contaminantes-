@@ -8,7 +8,7 @@
 
 namespace App\Controller;
 use App\Entity\PhenOff;
-use DateTime;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,16 +35,13 @@ class ApiPhenOffController extends AbstractController
      */
     public function getCWeightPolar($phenomenonId):Response{
         $em = $this->getDoctrine()->getManager();
-
-
-        $query = $em->createQuery('SELECT phenOff.phenomenonId,phenOff.pesoMolecular  
+       $query = $em->createQuery('SELECT phenOff.phenomenonId,phenOff.pesoMolecular  
                                     FROM App\Entity\PhenOff phenOff 
                                     where phenOff.phenomenonId LIKE :Id');
         $query->setParameter('Id','%'.$phenomenonId.'%');
 
         /** * @var PhenOff[] $phenoff */
         $phenoff = $query->getResult();
-
         return (empty($phenoff))
             ? $this->error404()
             : new JsonResponse(
