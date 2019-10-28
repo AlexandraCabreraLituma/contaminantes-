@@ -26,7 +26,7 @@ class ApiPhenOffController extends AbstractController
 {
     //ruta de la api de phenoff
     const PHENOFF_API_PATH='/api/v1/phenoff';
-
+    const WEIGHTPOLAR = '/weightPolar';
     /**
      * @param $phenomenonId
      * @Route(path="/weightPolar/{phenomenonId}", name="get_weight_polar", methods={ Request::METHOD_GET })
@@ -37,7 +37,7 @@ class ApiPhenOffController extends AbstractController
         $em = $this->getDoctrine()->getManager();
 
 
-        $query = $em->createQuery('SELECT phenOff.pesoMolecular  
+        $query = $em->createQuery('SELECT phenOff.phenomenonId,phenOff.pesoMolecular  
                                     FROM App\Entity\PhenOff phenOff 
                                     where phenOff.phenomenonId LIKE :Id');
         $query->setParameter('Id','%'.$phenomenonId.'%');
@@ -48,7 +48,7 @@ class ApiPhenOffController extends AbstractController
         return (empty($phenoff))
             ? $this->error404()
             : new JsonResponse(
-                ['phenoffs'=>$phenoff],
+                ['phenoff'=>$phenoff],
                 Response::HTTP_OK);
     }
 
