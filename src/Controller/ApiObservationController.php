@@ -29,6 +29,7 @@ class ApiObservationController extends AbstractController
     const SEARCH='/search';
     const CONTAMINANTE='/contaminante';
     const MAXHOUR='/maxHour';
+    const STADISTIC='/stadistic';
 
     /**
      * @param Request $request
@@ -109,9 +110,8 @@ class ApiObservationController extends AbstractController
                                                   or observation.phenomenonId LIKE :SO2Id
                                                   or observation.phenomenonId LIKE :PM2_5Id
                                                   or observation.phenomenonId LIKE :COId
-                                                  or observation.phenomenonId LIKE :NO2Id
-                                                  )                                                
-                                                  group by observation.phenomenonId');
+                                                  or observation.phenomenonId LIKE :NO2Id)
+                                                  group by observation.phenomenonId ');
         $query->setParameter('timeStampInitial',$data['initial_time_stamp']);
         $query->setParameter('timeStampFinal',$data['final_time_stamp']);
         $query->setParameter('O3Id','%'.$data['O3Id'].'%');
@@ -119,9 +119,6 @@ class ApiObservationController extends AbstractController
         $query->setParameter('PM2_5Id','%'.$data['PM2_5Id'].'%');
         $query->setParameter('COId','%'.$data['COId'].'%');
         $query->setParameter('NO2Id','%'.$data['NO2Id'].'%');
-
-
-
         /** * @var Observation[] $observations */
         $observations = $query->getResult();
 
