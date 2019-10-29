@@ -26,7 +26,8 @@ class ApiObservationController extends AbstractController
 {
     //ruta de la api de observation
     const OBSERVATION_API_PATH='/api/v1/observations';
-
+    const SEARCH='/search';
+    const CONTAMINANTE='/contaminante';
 
     /**
      * @param Request $request
@@ -62,16 +63,22 @@ class ApiObservationController extends AbstractController
         $dataRequest = $request->getContent();
         $data = json_decode($dataRequest, true);
 
-        $query = $em->createQuery('SELECT observationO3.timeStamp, observationO3.valor FROM 
-                                                  App\Entity\Observation observationO3  
-                                                  where observationO3.timeStamp>= :timeStampInitial 
-                                                  and observationO3.timeStamp<= :timeStampFinal
-                                                  and observationO3.phenomenonId LIKE :O3Id                                                
-                                                  ');
+        $query = $em->createQuery('SELECT observationO3.timeStamp, observationO3.valor 
+                                                    FROM App\Entity\Observation observationO3  
+                                                    where observationO3.timeStamp>= :timeStampInitial 
+                                                    and observationO3.timeStamp<= :timeStampFinal
+                                                    and observationO3.phenomenonId LIKE :O3Id
+                                                    ');
         $query->setParameter('timeStampInitial',$data['initial_time_stamp']);
         $query->setParameter('timeStampFinal',$data['final_time_stamp']);
         $query->setParameter('O3Id','%'.$data['O3Id'].'%');
-        //$query->setParameter('COId','%'.$data['COId'].'%');
+        /*
+        $query->setParameter('COId','%'.$data['COId'].'%');
+
+        $query->setParameter('SO2Id','%'.$data['SO2Id'].'%');
+        $query->setParameter('PM2_5Id','%'.$data['PM2_5Id'].'%');
+
+        $query->setParameter('NO2Id','%'.$data['NO2Id'].'%');
 
         /** * @var Observation[] $observations */
         $observations = $query->getResult();
