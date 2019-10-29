@@ -28,6 +28,7 @@ class ApiObservationController extends AbstractController
     const OBSERVATION_API_PATH='/api/v1/observations';
     const SEARCH='/search';
     const CONTAMINANTE='/contaminante';
+    const MAXHOUR='/maxHour';
 
     /**
      * @param Request $request
@@ -160,18 +161,16 @@ class ApiObservationController extends AbstractController
     }
 
     /**
-     * @Route(path="/MaxHour", name="max_hour", methods={ Request::METHOD_GET })
+     * @Route(path="/maxHour", name="max_hour", methods={ Request::METHOD_GET })
      * @return Response
      */
     public function getCMaxHour():Response{
         $em = $this->getDoctrine()->getManager();
-
         $query = $em->createQuery('SELECT max(observation.timeStamp) as maxHour FROM 
                                                   App\Entity\Observation observation');
 
         /** * @var Observation[] $observations */
         $observations = $query->getResult();
-
         return (empty($observations))
             ? $this->error404()
             : new JsonResponse(

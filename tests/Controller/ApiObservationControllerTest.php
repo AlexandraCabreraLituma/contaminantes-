@@ -93,5 +93,27 @@ class ApiObservationControllerTest extends WebTestCase
 
     }
 
+    /**
+     * Implements testGetCMaxHour200
+     * @throws \Exception
+     * @return array
+     * @covers ::getCMaxHour
+     */
+
+    public function testGetCMaxHour200(): array
+    {
+
+        self::$client->request(
+            Request::METHOD_GET,
+            ApiObservationController::OBSERVATION_API_PATH . ApiObservationController::MAXHOUR );
+        self::assertEquals(
+            Response::HTTP_OK,
+            self::$client->getResponse()->getStatusCode()
+        );
+        $cuerpo = self::$client->getResponse()->getContent();
+        $datosObservation = json_decode($cuerpo, true);
+        return $datosObservation['observations'];
+
+    }
 
 }
