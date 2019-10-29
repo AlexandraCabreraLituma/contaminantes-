@@ -9,6 +9,7 @@
 namespace App\Tests\Controller;
 
 use App\Controller\ApiObservationController;
+use phpDocumentor\Reflection\Types\Void_;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -114,6 +115,73 @@ class ApiObservationControllerTest extends WebTestCase
         $datosObservation = json_decode($cuerpo, true);
         return $datosObservation['observations'];
 
+    }
+
+    /**
+     * Implements testSearchAdvanceObservationStadistic200
+     * @throws \Exception
+     * @return array
+     * @covers ::searchAdvanceObservationStadistic
+     */
+
+    public function testSearchAdvanceObservationStadistic200(): array
+    {
+
+        $datos = [
+            'initial_time_stamp' => '2018-05-17 10:11:00-05',
+            'final_time_stamp'=>'2018-05-17 10:30:00-05',
+            'O3Id'=>'O3',
+            'SO2Id'=>'SO2',
+            'PM2_5Id'=>'PM2_5',
+            'COId'=>'CO',
+            'NO2Id'=>'NO2'
+            //"O3Id":"O3","SO2Id":"SO2","PM2_5Id":"PM2_5","COId":"CO","NO2Id":"NO2"
+        ];
+
+        self::$client->request(
+            Request::METHOD_POST,
+            ApiObservationController::OBSERVATION_API_PATH . ApiObservationController::SEARCH .ApiObservationController::STADISTIC,
+            [], [], [], json_encode($datos)
+        );
+        self::assertEquals(
+            Response::HTTP_OK,
+            self::$client->getResponse()->getStatusCode()
+        );
+        $cuerpo = self::$client->getResponse()->getContent();
+        $datosObservation = json_decode($cuerpo, true);
+        return $datosObservation['observations'];
+
+    }
+
+
+    /**
+     * Implements testSearchAdvanceObservationStadistic404
+     * @throws \Exception
+     * @covers ::searchAdvanceObservationStadistic
+     */
+    public function testSearchAdvanceObservationStadistic404(): void
+    {
+
+        $datos = [
+            'initial_time_stamp' => '2019-05-17 10:11:00-05',
+            'final_time_stamp'=>'2019-05-17 10:30:00-05',
+            'O3Id'=>'O3',
+            'SO2Id'=>'SO2',
+            'PM2_5Id'=>'PM2_5',
+            'COId'=>'CO',
+            'NO2Id'=>'NO2'
+            //"O3Id":"O3","SO2Id":"SO2","PM2_5Id":"PM2_5","COId":"CO","NO2Id":"NO2"
+        ];
+
+        self::$client->request(
+            Request::METHOD_POST,
+            ApiObservationController::OBSERVATION_API_PATH . ApiObservationController::SEARCH .ApiObservationController::STADISTIC,
+            [], [], [], json_encode($datos)
+        );
+        self::assertEquals(
+            Response::HTTP_NOT_FOUND,
+            self::$client->getResponse()->getStatusCode()
+        );
     }
 
 }
