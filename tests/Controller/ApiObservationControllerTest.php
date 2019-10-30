@@ -117,6 +117,8 @@ class ApiObservationControllerTest extends WebTestCase
 
     }
 
+
+
     /**
      * Implements testSearchAdvanceObservationStadistic200
      * @throws \Exception
@@ -183,5 +185,60 @@ class ApiObservationControllerTest extends WebTestCase
             self::$client->getResponse()->getStatusCode()
         );
     }
+
+    /**
+     * Implements testsearchAdvanceObservation200
+     * @throws \Exception
+     * @return array
+     * @covers ::searchAdvanceObservation
+     */
+
+    public function testsearchAdvanceObservation200(): array
+    {
+        $datos = [
+            'initial_time_stamp' => '2018-05-17 10:11:00-05',
+            'final_time_stamp'=>'2018-05-17 10:30:00-05',
+        ];
+        self::$client->request(
+            Request::METHOD_POST,
+            ApiObservationController::OBSERVATION_API_PATH . ApiObservationController::SEARCH,
+            [], [], [], json_encode($datos)
+        );
+        self::assertEquals(
+            Response::HTTP_OK,
+            self::$client->getResponse()->getStatusCode()
+        );
+        $cuerpo = self::$client->getResponse()->getContent();
+        $datosObservation = json_decode($cuerpo, true);
+        return $datosObservation['observations'];
+
+    }
+
+    /**
+     * Implements testSearchAdvanceObservation404
+     * @throws \Exception
+     * @return void
+     * @covers ::searchAdvanceObservation
+     */
+
+    public function testSearchAdvanceObservation404(): void
+    {
+
+        $datos = [
+            'initial_time_stamp' => '3019-05-17 10:11:00-05',
+            'final_time_stamp'=>'3019-05-17 10:30:00-05',
+        ];
+        self::$client->request(
+            Request::METHOD_POST,
+            ApiObservationController::OBSERVATION_API_PATH . ApiObservationController::SEARCH ,
+            [], [], [], json_encode($datos)
+        );
+        self::assertEquals(
+            Response::HTTP_NOT_FOUND,
+            self::$client->getResponse()->getStatusCode()
+        );
+
+    }
+
 
 }
