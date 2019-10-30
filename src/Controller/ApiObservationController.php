@@ -30,6 +30,8 @@ class ApiObservationController extends AbstractController
     const CONTAMINANTE='/contaminante';
     const MAXHOUR='/maxHour';
     const STADISTIC='/stadistic';
+    const ICA='/ICA';
+
 
     /**
      * @param Request $request
@@ -178,6 +180,7 @@ class ApiObservationController extends AbstractController
     /**
      * @Route(path="/{id}", name="options_project", methods={ Request::METHOD_OPTIONS })
      * @param Observation|null $observation
+     * @codeCoverageIgnore
      * @return Response
      */
     public function optionsObservation(?Observation $observation = null):Response{
