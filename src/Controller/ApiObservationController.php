@@ -151,13 +151,19 @@ class ApiObservationController extends AbstractController
 
         /** * @var Observation[] $observations */
         $observations = $query->getResult();
+        for ($i = 0; $i <= 4; $i++){
+            $observations[$i]['phenomenonId']=str_replace('urn:ogc:def:phenomenon:OGC:1.0.30:','',$observations[$i]['phenomenonId']);
+            echo $i;
+        }
 
         if($observations[4]['phenomenonId']=='urn:ogc:def:phenomenon:OGC:1.0.30:CO'){
 
             $observations[4]['promedio']=$observations[4]['promedio']*1000;
         }
+
         for ($i = 0; $i <= 4; $i++){
-            $observations[$i]['promedio']=round($observations[$i]['promedio'],3);
+            $observations[$i]['promedio']=number_format($observations[$i]['promedio'],3);
+            echo $i;
         }
 
 
