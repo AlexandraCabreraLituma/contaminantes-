@@ -152,7 +152,21 @@ class ApiObservationController extends AbstractController
         /** * @var Observation[] $observations */
         $observations = $query->getResult();
 
-        return (empty($observations))
+        if (!empty($observations)){
+            for ($i = 0; $i <= 4; $i++){
+                $observations[$i]['phenomenonId']=str_replace('urn:ogc:def:phenomenon:OGC:1.0.30:','',$observations[$i]['phenomenonId']);
+
+            }
+            if($observations[4]['phenomenonId']=='CO'){
+
+                $observations[4]['promedio']=$observations[4]['promedio']*1000;
+            }
+            for ($i = 0; $i <= 4; $i++){
+                $observations[$i]['promedio']=number_format($observations[$i]['promedio'],3);
+            }
+
+        }
+       return (empty($observations))
             ? $this->error404()
             : new JsonResponse(
                 ['observations'=>$observations],

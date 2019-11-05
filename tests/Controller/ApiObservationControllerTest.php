@@ -270,12 +270,11 @@ class ApiObservationControllerTest extends WebTestCase
     }
 
     /**
-     * Implements testSearchAdvanceObservation404
+     * Implements testSearchICA404
      * @throws \Exception
      * @return void
      * @covers ::searchICA
      */
-
     public function testSearchICA404(): void
     {
 
@@ -285,7 +284,7 @@ class ApiObservationControllerTest extends WebTestCase
         ];
         self::$client->request(
             Request::METHOD_POST,
-            ApiObservationController::OBSERVATION_API_PATH . ApiObservationController::SEARCH . ApiObservationController::ICA,
+            ApiObservationController::OBSERVATION_API_PATH . ApiObservationController::SEARCH .  ApiObservationController::ICA,
             [], [], [], json_encode($datos)
         );
         self::assertEquals(
