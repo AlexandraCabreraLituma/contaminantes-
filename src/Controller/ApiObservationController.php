@@ -166,11 +166,7 @@ class ApiObservationController extends AbstractController
             }
 
         }
-
-
-
-
-            return (empty($observations))
+       return (empty($observations))
             ? $this->error404()
             : new JsonResponse(
                 ['observations'=>$observations],
