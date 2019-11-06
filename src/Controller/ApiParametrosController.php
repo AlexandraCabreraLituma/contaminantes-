@@ -50,21 +50,21 @@ class ApiParametrosController extends AbstractController
 
         /** * @var Parametros[] $parametros */
         $parametros = $query->getResult();
-
+        $datos = array();
         if (!empty($parametros)){
             //(((ihi-ilo)/(bphi-bplo)*(valor-bplo)+ilo
            $parametros[0]['contaminante']=(($parametros[0]['ihi']-$parametros[0]['ilo'])/($parametros[0]['bphi']-$parametros[0]['bplo']))*
                                             ($data['valor']-$parametros[0]['bplo'])+
                                             $parametros[0]['ilo'];
             $parametros[0]['contaminante']=number_format($parametros[0]['contaminante'],3);
-
+            $datos = ['contaminante'=>$data['contaminanteId'],
+                'valor' => $parametros[0]['contaminante'],
+                'rango' => $parametros[0]['rango'],
+                'color' => $parametros[0]['color']];
 
         }
-        $data = array('contaminante'=>$data['contaminanteId'],
-                      'valor' => $parametros[0]['contaminante'],
-                      'rango' => $parametros[0]['rango'],
-                      'color' => $parametros[0]['color']);
-          return (empty($data))
+
+          return (empty($datos))
             ? $this->error404()
             : new JsonResponse(
                 ['parametros'=>$data],
