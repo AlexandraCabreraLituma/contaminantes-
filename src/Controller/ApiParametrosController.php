@@ -8,7 +8,7 @@
 
 namespace App\Controller;
 
-namespace App\Controller;
+
 use App\Entity\Parametros;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,10 +21,10 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class ApiParametrosController
  * @package App\Controller
- * @Route(path=ApiObservationController::PARAMETROS_API_PATH, name="api_parametros_")
+ * @Route(path=ApiParametrosController::PARAMETROS_API_PATH, name="api_parametros_")
  *
  */
-class ApiParametrosController  extends AbstractController
+class ApiParametrosController extends AbstractController
 {
     //ruta de la api de observation
     const OBSERVATION_API_PATH='/api/v1/observations';
@@ -34,29 +34,46 @@ class ApiParametrosController  extends AbstractController
     /**
      * @param Request $request
      * @return Response
-     * @Route(path="/contaminante", name="search", methods={"POST"})
+     * @Route(path="/search/contaminante", name="search_contaminante", methods={"POST"})
      */
     public function getCParametrosByContaminanteValor(Request $request):Response{
         $em = $this->getDoctrine()->getManager();
         $dataRequest = $request->getContent();
         $data = json_decode($dataRequest, true);
 
-        $query = $em->createQuery('SELECT observation.timeStamp,observation.phenomenonId, 
-                                    observation.valor FROM App\Entity\Observation observation 
-                                    where observation.timeStamp>= :timeStampInitial 
-                                    and observation.timeStamp<= :timeStampFinal 
+        $query = $em->createQuery('SELECT parametros 
+                                    FROM App\Entity\Parametros parametros 
+                                    where parametros.contaminante= :contaminante 
+                                    and parametros.bplo>= :valor
+                                    and parametros.bphi<= :valor  
                                     ');
         $query->setParameter('contaminante',$data['contaminante']);
         $query->setParameter('valor',$data['valor']);
 
-        /** * @var Observation[] $observations */
-        $observations = $query->getResult();
+        /** * @var Parametros[] $parametros */
+        $parametros = $query->getResult();
 
-        return (empty($observations))
+        return (empty($parametros))
             ? $this->error404()
             : new JsonResponse(
-                ['observations'=>$observations],
+                ['parametros'=>$parametros],
                 Response::HTTP_OK);
+    }
+
+    /**
+     * @return JsonResponse
+     ** @codeCoverageIgnore
+     */
+    private function error404() : JsonResponse
+    {
+        $mensaje=[
+            'code'=> Response::HTTP_NOT_FOUND,
+            'mensaje' => 'Not found resource not found'
+        ];
+        return new JsonResponse(
+            $mensaje,
+            Response::HTTP_NOT_FOUND
+        );
     }
 
 }
