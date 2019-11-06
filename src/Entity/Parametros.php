@@ -80,17 +80,17 @@ class Parametros implements \JsonSerializable
     }
 
     /**
-     * @return string|null
+     * @return integer|null
      */
-    public function getIhi(): ?string
+    public function getIhi(): ?integer
     {
         return $this->ihi;
     }
 
     /**
-     * @param string|null $ihi
+     * @param integer|null $ihi
      */
-    public function setIhi(?string $ihi): void
+    public function setIhi(?integer $ihi): void
     {
         $this->ihi = $ihi;
     }

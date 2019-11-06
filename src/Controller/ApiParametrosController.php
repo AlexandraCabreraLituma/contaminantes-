@@ -2,14 +2,11 @@
 /**
  * Created by PhpStorm.
  * User: adm
- * Date: 5/11/2019
- * Time: 17:55
+ * Date: 6/11/2019
+ * Time: 9:18
  */
 
 namespace App\Controller;
-
-
-use App\Entity\Parametros;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -27,7 +24,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ApiParametrosController extends AbstractController
 {
     //ruta de la api de observation
-    const OBSERVATION_API_PATH='/api/v1/observations';
+    const PARAMETROS_API_PATH='/api/v1/parametros';
     const SEARCH='/search';
     const CONTAMINANTE='/contaminante';
 
@@ -41,22 +38,36 @@ class ApiParametrosController extends AbstractController
         $dataRequest = $request->getContent();
         $data = json_decode($dataRequest, true);
 
-        $query = $em->createQuery('SELECT parametros 
+        $query = $em->createQuery('SELECT parametros.contaminante,parametros.rango,parametros.bphi,  parametros.bplo, parametros.ihi, parametros.ilo,parametros.color
                                     FROM App\Entity\Parametros parametros 
-                                    where parametros.contaminante= :contaminante 
-                                    and parametros.bplo>= :valor
-                                    and parametros.bphi<= :valor  
+                                    where parametros.contaminante LIKE :contaminanteId 
+                                    and parametros.bplo<= :valor
+                                    and parametros.bphi>= :valor
                                     ');
-        $query->setParameter('contaminante',$data['contaminante']);
+
+        $query->setParameter('contaminanteId','%'.$data['contaminanteId'].'%');
         $query->setParameter('valor',$data['valor']);
 
         /** * @var Parametros[] $parametros */
         $parametros = $query->getResult();
 
-        return (empty($parametros))
+        if (!empty($parametros)){
+            //(((ihi-ilo)/(bphi-bplo)*(valor-bplo)+ilo
+           $parametros[0]['contaminante']=(($parametros[0]['ihi']-$parametros[0]['ilo'])/($parametros[0]['bphi']-$parametros[0]['bplo']))*
+                                            ($data['valor']-$parametros[0]['bplo'])+
+                                            $parametros[0]['ilo'];
+            $parametros[0]['contaminante']=number_format($parametros[0]['contaminante'],3);
+
+
+        }
+        $data = array('contaminante'=>$data['contaminanteId'],
+                      'valor' => $parametros[0]['contaminante'],
+                      'rango' => $parametros[0]['rango'],
+                      'color' => $parametros[0]['color']);
+          return (empty($data))
             ? $this->error404()
             : new JsonResponse(
-                ['parametros'=>$parametros],
+                ['parametros'=>$data],
                 Response::HTTP_OK);
     }
 
@@ -75,5 +86,4 @@ class ApiParametrosController extends AbstractController
             Response::HTTP_NOT_FOUND
         );
     }
-
 }
