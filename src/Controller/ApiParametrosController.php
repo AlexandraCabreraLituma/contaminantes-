@@ -67,7 +67,7 @@ class ApiParametrosController extends AbstractController
           return (empty($datos))
             ? $this->error404()
             : new JsonResponse(
-                ['parametros'=>$data],
+                ['parametros'=>$datos],
                 Response::HTTP_OK);
     }
 
