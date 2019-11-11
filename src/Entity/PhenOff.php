@@ -103,6 +103,7 @@ class PhenOff implements \JsonSerializable
         return array(
             'phenomenonId'      => $this->phenomenonId,
             'unidad'            => $this->unidad,
+            'sensor'            => $this->sensor,
             'peso_molar'        => $this->pesoMolecular
         );
 

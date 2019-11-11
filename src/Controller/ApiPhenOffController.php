@@ -27,6 +27,8 @@ class ApiPhenOffController extends AbstractController
     //ruta de la api de phenoff
     const PHENOFF_API_PATH='/api/v1/phenoff';
     const WEIGHTPOLAR = '/weightPolar';
+    const SENSOR = '/sensor';
+
     /**
      * @param $phenomenonId
      * @Route(path="/weightPolar/{phenomenonId}", name="get_weight_polar", methods={ Request::METHOD_GET })
@@ -48,6 +50,33 @@ class ApiPhenOffController extends AbstractController
                 ['phenoff'=>$phenoff],
                 Response::HTTP_OK);
     }
+
+    /**
+     * @param $phenomenonId
+     * @Route(path="/sensor/{phenomenonId}", name="get_sensor", methods={ Request::METHOD_GET })
+     * @return Response
+     */
+    public function getCSensor($phenomenonId):Response{
+        $em = $this->getDoctrine()->getManager();
+        $query = $em->createQuery('SELECT phenOff.phenomenonId,phenOff.sensor  
+                                    FROM App\Entity\PhenOff phenOff 
+                                    where phenOff.phenomenonId LIKE :Id');
+        $query->setParameter('Id','%'.$phenomenonId.'%');
+
+        /** * @var PhenOff[] $phenoff */
+        $phenoff = $query->getResult();
+
+       if (!empty($phenoff)){
+                $phenoff[0]['phenomenonId']=str_replace('urn:ogc:def:phenomenon:OGC:1.0.30:','',$phenoff[0]['phenomenonId']);
+        }
+
+        return (empty($phenoff))
+            ? $this->error404()
+            : new JsonResponse(
+                ['phenoff'=>$phenoff],
+                Response::HTTP_OK);
+    }
+
 
     /**
      * @return JsonResponse
