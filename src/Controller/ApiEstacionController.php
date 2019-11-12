@@ -5,17 +5,13 @@
  * Date: 12/11/2019
  * Time: 13:15
  */
-
 namespace App\Controller;
 use App\Entity\Estacion;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-
 use Symfony\Component\Routing\Annotation\Route;
-
-
 /**
  * Class ApiEstacionController
  * @package App\Controller
@@ -26,7 +22,6 @@ class ApiEstacionController extends AbstractController
 {
     //ruta de la api de estacion
     const ESTACION_API_PATH='/api/v1/estacion';
-
     /**
      * @Route(path="/{id}", name="get_estacion", methods={ Request::METHOD_GET })
      * @param Estacion $estacion
@@ -38,8 +33,6 @@ class ApiEstacionController extends AbstractController
             ? $this->error404()
             : new JsonResponse(['estacion' => $estacion], Response::HTTP_OK);
     }
-
-
     /**
      * @return JsonResponse
      ** @codeCoverageIgnore
