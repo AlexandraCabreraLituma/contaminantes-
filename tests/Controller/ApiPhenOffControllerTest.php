@@ -76,4 +76,50 @@ class ApiPhenOffControllerTest extends WebTestCase
         );
 
     }
+
+    /**
+     * Implements testGetPhenOff200
+     *
+     * @covers ::getCPhenOff
+     */
+    public function testGetPhenOff200(): void
+    {
+        $id = 'SO2';
+        self::$client->request(
+            Request::METHOD_GET,
+            ApiPhenOffController::PHENOFF_API_PATH . '/' .$id
+        );
+        self::assertEquals(
+            Response::HTTP_OK,
+            self::$client->getResponse()->getStatusCode()
+        );
+        $cuerpo = self::$client->getResponse()->getContent();
+        self::assertJson($cuerpo);
+        /** @var array $datos */
+        $datos = json_decode($cuerpo, true);
+        self::assertArrayHasKey('phenoff', $datos);
+
+        self::assertEquals($id, $datos['phenoff']['phenomenonId']);
+
+    }
+
+    /**
+     * Implements testGetPhenOff404
+     *
+     * @covers ::getCPhenOff
+     */
+    public function testGetPhenOff404(): void
+    {
+        $id = 'asdasd';
+        self::$client->request(
+            Request::METHOD_GET,
+            ApiPhenOffController::PHENOFF_API_PATH .  '/' .$id
+        );
+        self::assertEquals(
+            Response::HTTP_NOT_FOUND,
+            self::$client->getResponse()->getStatusCode()
+        );
+
+    }
+
 }
