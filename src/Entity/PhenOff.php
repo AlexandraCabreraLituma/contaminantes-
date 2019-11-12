@@ -16,6 +16,165 @@ use Doctrine\Common\Collections\Collection;
 class PhenOff implements \JsonSerializable
 {
     /**
+     * @return string
+     */
+    public function getPhenomenonId(): string
+    {
+        return $this->phenomenonId;
+    }
+
+    /**
+     * @param string $phenomenonId
+     */
+    public function setPhenomenonId(string $phenomenonId): void
+    {
+        $this->phenomenonId = $phenomenonId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOfferingId(): string
+    {
+        return $this->offeringId;
+    }
+
+    /**
+     * @param string $offeringId
+     */
+    public function setOfferingId(string $offeringId): void
+    {
+        $this->offeringId = $offeringId;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getIdContaminanteEmov(): ?int
+    {
+        return $this->idContaminanteEmov;
+    }
+
+    /**
+     * @param int|null $idContaminanteEmov
+     */
+    public function setIdContaminanteEmov(?int $idContaminanteEmov): void
+    {
+        $this->idContaminanteEmov = $idContaminanteEmov;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getUnidad(): ?string
+    {
+        return $this->unidad;
+    }
+
+    /**
+     * @param string|null $unidad
+     */
+    public function setUnidad(?string $unidad): void
+    {
+        $this->unidad = $unidad;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPesoMolecular(): ?string
+    {
+        return $this->pesoMolecular;
+    }
+
+    /**
+     * @param string|null $pesoMolecular
+     */
+    public function setPesoMolecular(?string $pesoMolecular): void
+    {
+        $this->pesoMolecular = $pesoMolecular;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getConversion(): ?bool
+    {
+        return $this->conversion;
+    }
+
+    /**
+     * @param bool|null $conversion
+     */
+    public function setConversion(?bool $conversion): void
+    {
+        $this->conversion = $conversion;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSensor(): ?string
+    {
+        return $this->sensor;
+    }
+
+    /**
+     * @param string|null $sensor
+     */
+    public function setSensor(?string $sensor): void
+    {
+        $this->sensor = $sensor;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAlertaTulsma(): ?string
+    {
+        return $this->alertaTulsma;
+    }
+
+    /**
+     * @param string|null $alertaTulsma
+     */
+    public function setAlertaTulsma(?string $alertaTulsma): void
+    {
+        $this->alertaTulsma = $alertaTulsma;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAlarmaTulsma(): ?string
+    {
+        return $this->alarmaTulsma;
+    }
+
+    /**
+     * @param string|null $alarmaTulsma
+     */
+    public function setAlarmaTulsma(?string $alarmaTulsma): void
+    {
+        $this->alarmaTulsma = $alarmaTulsma;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getEmergenciaTulsma(): ?string
+    {
+        return $this->emergenciaTulsma;
+    }
+
+    /**
+     * @param string|null $emergenciaTulsma
+     */
+    public function setEmergenciaTulsma(?string $emergenciaTulsma): void
+    {
+        $this->emergenciaTulsma = $emergenciaTulsma;
+    }
+    /**
      * @var string
      *
      * @ORM\Column(name="phenomenon_id", type="string", length=100, nullable=false)
@@ -104,7 +263,10 @@ class PhenOff implements \JsonSerializable
             'phenomenonId'      => $this->phenomenonId,
             'unidad'            => $this->unidad,
             'sensor'            => $this->sensor,
-            'peso_molar'        => $this->pesoMolecular
+            'peso_molar'        => $this->pesoMolecular,
+            'alertaTulsma'      =>$this->alertaTulsma,
+            'alarmaTulsma'      =>$this->alarmaTulsma,
+            'emergenciaTulsa'   =>$this->emergenciaTulsma
         );
 
     }
