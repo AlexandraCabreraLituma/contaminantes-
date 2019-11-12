@@ -3,6 +3,9 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+
 
 /**
  * Estacion
@@ -10,8 +13,55 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="estacion")
  * @ORM\Entity
  */
-class Estacion
+class Estacion implements \JsonSerializable
 {
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getNombre(): ?string
+    {
+        return $this->nombre;
+    }
+
+    /**
+     * @param string|null $nombre
+     */
+    public function setNombre(?string $nombre): void
+    {
+        $this->nombre = $nombre;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getUbicacion(): ?string
+    {
+        return $this->ubicacion;
+    }
+
+    /**
+     * @param string|null $ubicacion
+     */
+    public function setUbicacion(?string $ubicacion): void
+    {
+        $this->ubicacion = $ubicacion;
+    }
     /**
      * @var int
      *
@@ -92,5 +142,23 @@ class Estacion
      */
     private $metIdUltimoRegistroCargado;
 
+    /**
+     * Specify data which should be serialized to JSON
+     *
+     * @link   http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since  5.4.0
+     */
+    public function jsonSerialize():array
+    {
+
+        return array(
+            'nombre'      => $this->nombre,
+            'ubicacion'   => $this->ubicacion
+
+        );
+
+    }
 
 }
