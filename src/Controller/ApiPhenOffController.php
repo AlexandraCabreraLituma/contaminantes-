@@ -53,28 +53,22 @@ class ApiPhenOffController extends AbstractController
 
     /**
      * @param $phenomenonId
-     * @Route(path="/sensor/{phenomenonId}", name="get_sensor", methods={ Request::METHOD_GET })
+     * @Route(path="/{phenomenonId}", name="get_phen_off", methods={ Request::METHOD_GET })
      * @return Response
      */
-    public function getCSensor($phenomenonId):Response{
+    public function getCPhenOff($phenomenonId):Response{
         $em = $this->getDoctrine()->getManager();
-        $query = $em->createQuery('SELECT phenOff.phenomenonId,phenOff.sensor  
-                                    FROM App\Entity\PhenOff phenOff 
-                                    where phenOff.phenomenonId LIKE :Id');
-        $query->setParameter('Id','%'.$phenomenonId.'%');
-
-        /** * @var PhenOff[] $phenoff */
-        $phenoff = $query->getResult();
-
-       if (!empty($phenoff)){
-                $phenoff[0]['phenomenonId']=str_replace('urn:ogc:def:phenomenon:OGC:1.0.30:','',$phenoff[0]['phenomenonId']);
-        }
-
-        return (empty($phenoff))
+        $phenomenonId='urn:ogc:def:phenomenon:OGC:1.0.30:'.$phenomenonId;
+        /** * @var PhenOff $phenoff*/
+        $phenoff = $em->getRepository(PhenOff::class)->findOneBy(['phenomenonId' =>$phenomenonId]);
+       if (null!==$phenoff){
+             $phenoff->setPhenomenonId(str_replace('urn:ogc:def:phenomenon:OGC:1.0.30:','', $phenoff->getPhenomenonId()));
+       }
+        return (null=== $phenoff)
             ? $this->error404()
-            : new JsonResponse(
-                ['phenoff'=>$phenoff],
+            : new JsonResponse(['phenoff'=> $phenoff],
                 Response::HTTP_OK);
+
     }
 
 
