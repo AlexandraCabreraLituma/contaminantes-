@@ -154,6 +154,7 @@ class Estacion implements \JsonSerializable
     {
 
         return array(
+            'id'          =>$this->id,
             'nombre'      => $this->nombre,
             'ubicacion'   => $this->ubicacion
 
