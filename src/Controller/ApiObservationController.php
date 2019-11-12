@@ -5,7 +5,6 @@
  * Date: 21/10/2019
  * Time: 10:31
  */
-
 namespace App\Controller;
 use App\Entity\Observation;
 use DateTime;
@@ -13,9 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-
 use Symfony\Component\Routing\Annotation\Route;
-
 /**
  * Class ApiObservationController
  * @package App\Controller
@@ -31,8 +28,6 @@ class ApiObservationController extends AbstractController
     const MAXHOUR='/maxHour';
     const STADISTIC='/stadistic';
     const ICA='/ICA';
-
-
     /**
      * @param Request $request
      * @return Response
@@ -42,21 +37,17 @@ class ApiObservationController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $dataRequest = $request->getContent();
         $data = json_decode($dataRequest, true);
-
         $query = $em->createQuery('SELECT observation.timeStamp,observation.phenomenonId, observation.valor FROM App\Entity\Observation observation where observation.timeStamp>= :timeStampInitial and observation.timeStamp<= :timeStampFinal ORDER BY observation.timeStamp ASC');
         $query->setParameter('timeStampInitial',$data['initial_time_stamp']);
         $query->setParameter('timeStampFinal',$data['final_time_stamp']);
-
         /** * @var Observation[] $observations */
         $observations = $query->getResult();
-
         return (empty($observations))
             ? $this->error404()
             : new JsonResponse(
                 ['observations'=>$observations],
                 Response::HTTP_OK);
     }
-
     /**
      * @param Request $request
      * @return Response
@@ -66,7 +57,6 @@ class ApiObservationController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $dataRequest = $request->getContent();
         $data = json_decode($dataRequest, true);
-
         $query = $em->createQuery('SELECT observationO3.timeStamp, observationO3.valor 
                                                     FROM App\Entity\Observation observationO3  
                                                     where observationO3.timeStamp>= :timeStampInitial 
@@ -78,22 +68,17 @@ class ApiObservationController extends AbstractController
         $query->setParameter('O3Id','%'.$data['O3Id'].'%');
         /*
         $query->setParameter('COId','%'.$data['COId'].'%');
-
         $query->setParameter('SO2Id','%'.$data['SO2Id'].'%');
         $query->setParameter('PM2_5Id','%'.$data['PM2_5Id'].'%');
-
         $query->setParameter('NO2Id','%'.$data['NO2Id'].'%');
-
         /** * @var Observation[] $observations */
         $observations = $query->getResult();
-
         return (empty($observations))
             ? $this->error404()
             : new JsonResponse(
                 ['observations'=>$observations],
                 Response::HTTP_OK);
     }
-
     /**
      * @param Request $request
      * @return Response
@@ -103,7 +88,6 @@ class ApiObservationController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $dataRequest = $request->getContent();
         $data = json_decode($dataRequest, true);
-
         $query = $em->createQuery('SELECT observation.phenomenonId, max(observation.valor) as maximo, min(observation.valor) as minimo, avg(observation.valor) as promedio  FROM 
                                                   App\Entity\Observation observation  
                                                   where observation.timeStamp>= :timeStampInitial 
@@ -123,14 +107,12 @@ class ApiObservationController extends AbstractController
         $query->setParameter('NO2Id','%'.$data['NO2Id'].'%');
         /** * @var Observation[] $observations */
         $observations = $query->getResult();
-
         return (empty($observations))
             ? $this->error404()
             : new JsonResponse(
                 ['observations'=>$observations],
                 Response::HTTP_OK);
     }
-
     /**
      * @param Request $request
      * @return Response
@@ -140,7 +122,6 @@ class ApiObservationController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $dataRequest = $request->getContent();
         $data = json_decode($dataRequest, true);
-
         $query = $em->createQuery('SELECT observation.phenomenonId , avg(observation.valor) as promedio  
                                     FROM App\Entity\Observation observation 
                                     where observation.timeStamp>= :timeStampInitial 
@@ -148,31 +129,25 @@ class ApiObservationController extends AbstractController
                                     group by observation.phenomenonId');
         $query->setParameter('timeStampInitial',$data['initial_time_stamp']);
         $query->setParameter('timeStampFinal',$data['final_time_stamp']);
-
         /** * @var Observation[] $observations */
         $observations = $query->getResult();
-
         if (!empty($observations)){
             for ($i = 0; $i <= 4; $i++){
                 $observations[$i]['phenomenonId']=str_replace('urn:ogc:def:phenomenon:OGC:1.0.30:','',$observations[$i]['phenomenonId']);
-
             }
             if($observations[4]['phenomenonId']=='CO'){
-
                 $observations[4]['promedio']=$observations[4]['promedio']*1000;
             }
             for ($i = 0; $i <= 4; $i++){
                 $observations[$i]['promedio']=number_format($observations[$i]['promedio'],3);
             }
-
         }
-       return (empty($observations))
+        return (empty($observations))
             ? $this->error404()
             : new JsonResponse(
                 ['observations'=>$observations],
                 Response::HTTP_OK);
     }
-
     /**
      * @Route(path="/maxHour", name="max_hour", methods={ Request::METHOD_GET })
      * @return Response
@@ -181,7 +156,6 @@ class ApiObservationController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $query = $em->createQuery('SELECT max(observation.timeStamp) as maxHour FROM 
                                                   App\Entity\Observation observation');
-
         /** * @var Observation[] $observations */
         $observations = $query->getResult();
         return (empty($observations))
@@ -190,7 +164,6 @@ class ApiObservationController extends AbstractController
                 ['observations'=>$observations],
                 Response::HTTP_OK);
     }
-
     /**
      * @Route(path="/{id}", name="options_project", methods={ Request::METHOD_OPTIONS })
      * @param Observation|null $observation
@@ -198,15 +171,12 @@ class ApiObservationController extends AbstractController
      * @return Response
      */
     public function optionsObservation(?Observation $observation = null):Response{
-
         if (null === $observation) {
             return $this->error404();
         }
         $options="POST,PATCH,GET,PUT,DELETE,OPTIONS";
         return new JsonResponse(null,Response::HTTP_OK ,["Allow" => $options]);
     }
-
-
     /**
      * @return JsonResponse
      ** @codeCoverageIgnore
@@ -222,5 +192,4 @@ class ApiObservationController extends AbstractController
             Response::HTTP_NOT_FOUND
         );
     }
-
 }
