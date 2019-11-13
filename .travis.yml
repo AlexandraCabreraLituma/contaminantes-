@@ -21,4 +21,4 @@ script:
   - sonar-scanner
 test:
   override:
-    - vendor/bin/phpunit --configuration phpunit.xml --coverage-clover=coverage-report.clover --log-junit=test-report.xml
+    - vendor/bin/phpunit --configuration phpunit.xml
