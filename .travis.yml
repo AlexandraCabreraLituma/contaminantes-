@@ -19,3 +19,6 @@ before_install:
   - composer install
 script:
   - sonar-scanner
+test:
+  override:
+    - vendor/bin/phpunit --configuration phpunit.xml
