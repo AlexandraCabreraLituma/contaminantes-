@@ -9,7 +9,6 @@
 namespace App\Tests\Controller;
 
 use App\Controller\ApiObservationController;
-use phpDocumentor\Reflection\Types\Void_;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
