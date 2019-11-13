@@ -3,18 +3,22 @@ php:
   - '7.2'
 branches:
   only:
-  - master
-  - develop
+    - master
+    - develop
 notifications:
   email:
     recipients:
-    - alecabreralituma2@gmail.com
+      - alecabreralituma2@gmail.com
 addons:
   sonarcloud:
     organization: "alexandracabreralituma-github"
+git:
+  depth: false
 before_install:
   - travis_retry composer self-update
   - composer install
 script:
-  - phpunit --exclude-group FITS --bootstrap vendor/autoload.php tests
   - sonar-scanner
+test:
+  override:
+    - vendor/bin/phpunit --configuration phpunit.xml --coverage-clover=coverage-report.clover --log-junit=test-report.xml
