@@ -5,6 +5,7 @@ branches:
   only:
     - master
     - develop
+    - dummy
 notifications:
   email:
     recipients:
