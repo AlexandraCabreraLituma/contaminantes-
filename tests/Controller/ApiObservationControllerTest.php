@@ -141,7 +141,7 @@ class ApiObservationControllerTest extends WebTestCase
 
         self::$client->request(
             Request::METHOD_POST,
-            ApiObservationController::OBSERVATION_API_PATH . ApiObservationController::SEARCH .ApiObservationController::STADISTIC,
+            ApiObservationController::OBSERVATION_API_PATH  .ApiObservationController::STADISTIC.ApiObservationController::GENERAL,
             [], [], [], json_encode($datos)
         );
         self::assertEquals(
@@ -176,7 +176,7 @@ class ApiObservationControllerTest extends WebTestCase
 
         self::$client->request(
             Request::METHOD_POST,
-            ApiObservationController::OBSERVATION_API_PATH . ApiObservationController::SEARCH .ApiObservationController::STADISTIC,
+            ApiObservationController::OBSERVATION_API_PATH .ApiObservationController::STADISTIC. ApiObservationController::GENERAL,
             [], [], [], json_encode($datos)
         );
         self::assertEquals(
