@@ -27,6 +27,8 @@ class ApiObservationController extends AbstractController
     const CONTAMINANTE='/contaminante';
     const MAXHOUR='/maxHour';
     const STADISTIC='/stadistic';
+    const BASIC='/basic';
+    const MODA='/moda';
     const ICA='/ICA';
     /**
      * @param Request $request
@@ -82,7 +84,7 @@ class ApiObservationController extends AbstractController
     /**
      * @param Request $request
      * @return Response
-     * @Route(path="/search/stadistic", name="search_stadistic", methods={"POST"})
+     * @Route(path="/stadistic/general", name="stadistic_general", methods={"POST"})
      */
     public function searchAdvanceObservationStadistic(Request $request): Response{
         $em = $this->getDoctrine()->getManager();
@@ -177,6 +179,40 @@ class ApiObservationController extends AbstractController
         $options="POST,PATCH,GET,PUT,DELETE,OPTIONS";
         return new JsonResponse(null,Response::HTTP_OK ,["Allow" => $options]);
     }
+
+    /**
+     * @param Request $request
+     * @return Response
+     * @Route(path="/stadistic/moda", name="stadistic_moda", methods={"POST"})
+     */
+    public function stadisticObservationModa(Request $request): Response{
+        $em = $this->getDoctrine()->getManager();
+        $dataRequest = $request->getContent();
+        $data = json_decode($dataRequest, true);
+        $query = $em->createQuery('SELECT distinct observation.valor as valor, count(observation.valor) as contador 
+                                                  FROM 
+                                                  App\Entity\Observation observation  
+                                                  where observation.timeStamp>= :timeStampInitial 
+                                                  and observation.timeStamp<= :timeStampFinal
+                                                  and observation.phenomenonId LIKE :Id
+                                                  and observation.valor<>0
+                                                  group by observation.valor
+                                                  order by count(observation.valor)DESC
+                                                  ')->setMaxResults(1);
+        $query->setParameter('timeStampInitial',$data['initial_time_stamp']);
+        $query->setParameter('timeStampFinal',$data['final_time_stamp']);
+        $query->setParameter('Id','%'.$data['Id'].'%');
+
+        /** * @var Observation $observations */
+        $observations = $query->getResult();
+        return (empty($observations))
+            ? $this->error404()
+            : new JsonResponse(
+                ['observations'=>$observations],
+                Response::HTTP_OK);
+    }
+
+
     /**
      * @return JsonResponse
      ** @codeCoverageIgnore
