@@ -41,14 +41,13 @@ class ApiObservationControllerTest extends WebTestCase
      * @return array
      * @covers ::searchAdvanceObservationByContaminante
      */
-
     public function testSearchAdvanceObservationByContaminante200(): array
     {
 
         $datos = [
             'initial_time_stamp' => '2018-05-17 10:11:00-05',
             'final_time_stamp'=>'2018-05-17 10:30:00-05',
-            'O3Id'=>'O3',
+            'Id'=>'O3',
         ];
 
         self::$client->request(
@@ -72,14 +71,13 @@ class ApiObservationControllerTest extends WebTestCase
      * @return void
      * @covers ::searchAdvanceObservationByContaminante
      */
-
     public function testSearchAdvanceObservationByContaminante404(): void
     {
 
         $datos = [
             'initial_time_stamp' => '2018-05-17 10:11:00-05',
             'final_time_stamp'=>'2018-05-17 10:30:00-05',
-            'O3Id'=>'asasasas',
+            'Id'=>'asasasas',
         ];
 
         self::$client->request(

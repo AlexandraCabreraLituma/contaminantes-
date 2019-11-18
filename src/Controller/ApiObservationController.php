@@ -30,6 +30,8 @@ class ApiObservationController extends AbstractController
     const BASIC='/basic';
     const MODA='/moda';
     const ICA='/ICA';
+    const STANDARD_DESVIATION='standardDesviation';
+
     /**
      * @param Request $request
      * @return Response
@@ -59,15 +61,15 @@ class ApiObservationController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $dataRequest = $request->getContent();
         $data = json_decode($dataRequest, true);
-        $query = $em->createQuery('SELECT observationO3.timeStamp, observationO3.valor 
-                                                    FROM App\Entity\Observation observationO3  
-                                                    where observationO3.timeStamp>= :timeStampInitial 
-                                                    and observationO3.timeStamp<= :timeStampFinal
-                                                    and observationO3.phenomenonId LIKE :O3Id
+        $query = $em->createQuery('SELECT observation.phenomenonId, observation.timeStamp, observation.valor 
+                                                    FROM App\Entity\Observation observation 
+                                                    where observation.timeStamp>= :timeStampInitial 
+                                                    and observation.timeStamp<= :timeStampFinal
+                                                    and observation.phenomenonId LIKE :Id
                                                     ');
         $query->setParameter('timeStampInitial',$data['initial_time_stamp']);
         $query->setParameter('timeStampFinal',$data['final_time_stamp']);
-        $query->setParameter('O3Id','%'.$data['O3Id'].'%');
+        $query->setParameter('Id','%'.$data['Id'].'%');
         /*
         $query->setParameter('COId','%'.$data['COId'].'%');
         $query->setParameter('SO2Id','%'.$data['SO2Id'].'%');
@@ -75,6 +77,16 @@ class ApiObservationController extends AbstractController
         $query->setParameter('NO2Id','%'.$data['NO2Id'].'%');
         /** * @var Observation[] $observations */
         $observations = $query->getResult();
+        if (!empty($observations)){
+            for ($i = 0; $i < count($observations); $i++){
+                $observations[$i]['phenomenonId']=str_replace('urn:ogc:def:phenomenon:OGC:1.0.30:','',$observations[$i]['phenomenonId']);
+                if($observations[$i]['phenomenonId']=='CO'){
+                    $observations[$i]['valor']=$observations[$i]['valor']*1000;
+                }
+                $observations[$i]['valor']=number_format($observations[$i]['valor'],3);
+            }
+        }
+
         return (empty($observations))
             ? $this->error404()
             : new JsonResponse(
@@ -205,13 +217,70 @@ class ApiObservationController extends AbstractController
         /** * @var Observation[] $observations */
         $observations = $query->getResult();
         if (!empty($observations)){
-                $observations[0]['valor']=number_format($observations[0]['valor'],3);
+            if($data['Id']=='CO'){
+                $observations[0]['valor']=$observations[0]['valor']*1000;
+            }
+            $observations[0]['valor']=number_format($observations[0]['valor'],3);
         }
 
         return (empty($observations))
             ? $this->error404()
             : new JsonResponse(
                 ['observations'=>$observations],
+                Response::HTTP_OK);
+    }
+
+
+    /**
+     * @param Request $request
+     * @return Response
+     * @Route(path="/stadistic/standardDesviation", name="stadistic_standard_desviation", methods={"POST"})
+     */
+    public function stadisticObservationStandardDesviation(Request $request): Response{
+        $em = $this->getDoctrine()->getManager();
+        $dataRequest = $request->getContent();
+        $data = json_decode($dataRequest, true);
+        $query = $em->createQuery('SELECT  observation.phenomenonId , observation.valor as valor
+                                     FROM App\Entity\Observation observation  
+                                     where observation.timeStamp>= :timeStampInitial 
+                                       and observation.timeStamp<= :timeStampFinal
+                                       and observation.phenomenonId LIKE :Id');
+        $query->setParameter('timeStampInitial',$data['initial_time_stamp']);
+        $query->setParameter('timeStampFinal',$data['final_time_stamp']);
+        $query->setParameter('Id','%'.$data['Id'].'%');
+
+        /** * @var Observation[] $observations */
+        $observations = $query->getResult();
+        $num_of_elements=count($observations);
+        $arr = array();
+        if (!empty($observations)){
+            for ($i = 0; $i < $num_of_elements; $i++){
+                if($observations[$i]['phenomenonId']=='CO'){
+                    $observations[$i]['valor']=$observations[$i]['valor']*1000;
+                }
+                $arr[$i] = $observations[$i]['valor'];
+            }
+        }
+
+        $variance = 0.0;
+        // calculating mean using array_sum() method
+        $average = array_sum($arr)/$num_of_elements;
+        foreach($arr as $i)
+        {
+            // sum of squares of differences between
+            // all numbers and means.
+            $variance += pow(($i - $average), 2);
+        }
+        $standard_desviation=(float)sqrt($variance/$num_of_elements);
+        $standard_desviation=number_format($standard_desviation,3);
+
+        $datos = ['phenomenonId'=>$data['Id'],
+                  'valor'=>$standard_desviation];
+
+        return (empty($datos))
+            ? $this->error404()
+            : new JsonResponse(
+                ['observations'=>$datos],
                 Response::HTTP_OK);
     }
 
