@@ -28,6 +28,7 @@ class ApiObservationController extends AbstractController
     const MAXHOUR='/maxHour';
     const STADISTIC='/stadistic';
     const BASIC='/basic';
+    const GENERAL='/general';
     const MODA='/moda';
     const ICA='/ICA';
     const STANDARD_DESVIATION='standardDesviation';
