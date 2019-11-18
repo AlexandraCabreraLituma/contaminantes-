@@ -9,6 +9,7 @@
 namespace App\Tests\Controller;
 
 use App\Controller\ApiObservationController;
+use phpDocumentor\Reflection\Types\Void_;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -293,6 +294,64 @@ class ApiObservationControllerTest extends WebTestCase
 
     }
 
+
+    /**
+     * Implements testStadisticObservationModa200
+     * @throws \Exception
+     * @return void
+     * @covers ::stadisticObservationModa
+     */
+
+    public function testStadisticObservationModa200(): void
+    {
+
+        $datos = [
+            'initial_time_stamp' => '2018-05-17 10:11:00-05',
+            'final_time_stamp'=>'2018-05-17 10:30:00-05',
+            'Id'=>'NO2',
+        ];
+
+        self::$client->request(
+            Request::METHOD_POST,
+            ApiObservationController::OBSERVATION_API_PATH . ApiObservationController::STADISTIC .ApiObservationController::MODA,
+            [], [], [], json_encode($datos)
+        );
+        self::assertEquals(
+            Response::HTTP_OK,
+            self::$client->getResponse()->getStatusCode()
+        );
+        $cuerpo = self::$client->getResponse()->getContent();
+        $datosObservation = json_decode($cuerpo, true);
+
+        self::assertArrayHasKey('observations', $datosObservation);
+
+    }
+
+    /**
+     * Implements testStadisticObservationModa404
+     * @throws \Exception
+     * @return void
+     * @covers ::stadisticObservationModa
+     */
+    public function testStadisticObservationModa404(): void
+    {
+
+        $datos = [
+            'initial_time_stamp' => '3019-05-17 10:11:00-05',
+            'final_time_stamp'=>'3019-05-17 10:30:00-05',
+            'Id'=>'NO2QQQWQE',
+        ];
+        self::$client->request(
+            Request::METHOD_POST,
+            ApiObservationController::OBSERVATION_API_PATH . ApiObservationController::STADISTIC .ApiObservationController::MODA,
+            [], [], [], json_encode($datos)
+        );
+        self::assertEquals(
+            Response::HTTP_NOT_FOUND,
+            self::$client->getResponse()->getStatusCode()
+        );
+
+    }
 
 
 }

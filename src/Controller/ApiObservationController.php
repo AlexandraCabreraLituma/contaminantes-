@@ -190,21 +190,24 @@ class ApiObservationController extends AbstractController
         $dataRequest = $request->getContent();
         $data = json_decode($dataRequest, true);
         $query = $em->createQuery('SELECT distinct observation.valor as valor, count(observation.valor) as contador 
-                                                  FROM 
-                                                  App\Entity\Observation observation  
-                                                  where observation.timeStamp>= :timeStampInitial 
-                                                  and observation.timeStamp<= :timeStampFinal
-                                                  and observation.phenomenonId LIKE :Id
-                                                  and observation.valor<>0
-                                                  group by observation.valor
-                                                  order by count(observation.valor)DESC
-                                                  ')->setMaxResults(1);
+                                     FROM App\Entity\Observation observation  
+                                     where observation.timeStamp>= :timeStampInitial 
+                                       and observation.timeStamp<= :timeStampFinal
+                                       and observation.phenomenonId LIKE :Id
+                                       and observation.valor<>0
+                                       group by observation.valor
+                                       order by count(observation.valor)DESC
+                                  ')->setMaxResults(1);
         $query->setParameter('timeStampInitial',$data['initial_time_stamp']);
         $query->setParameter('timeStampFinal',$data['final_time_stamp']);
         $query->setParameter('Id','%'.$data['Id'].'%');
 
-        /** * @var Observation $observations */
+        /** * @var Observation[] $observations */
         $observations = $query->getResult();
+        if (!empty($observations)){
+                $observations[0]['valor']=number_format($observations[0]['valor'],3);
+        }
+
         return (empty($observations))
             ? $this->error404()
             : new JsonResponse(
