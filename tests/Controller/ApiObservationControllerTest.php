@@ -406,6 +406,61 @@ class ApiObservationControllerTest extends WebTestCase
 
     }
 
+    /**
+     * Implements teststadisticObservationVariance200
+     * @throws \Exception
+     * @return void
+     * @covers ::stadisticObservationVariance
+     */
+    public function teststadisticObservationVariance200(): void
+    {
 
+        $datos = [
+            'initial_time_stamp' => '2018-05-17 10:11:00-05',
+            'final_time_stamp'=>'2018-05-17 10:30:00-05',
+            'Id'=>'NO2',
+        ];
+
+        self::$client->request(
+            Request::METHOD_POST,
+            ApiObservationController::OBSERVATION_API_PATH . ApiObservationController::STADISTIC .ApiObservationController::VARIANCE,
+            [], [], [], json_encode($datos)
+        );
+        self::assertEquals(
+            Response::HTTP_OK,
+            self::$client->getResponse()->getStatusCode()
+        );
+        $cuerpo = self::$client->getResponse()->getContent();
+        $datosObservation = json_decode($cuerpo, true);
+
+        self::assertArrayHasKey('observations', $datosObservation);
+
+    }
+
+    /**
+     * Implements teststadisticObservationVariance404
+     * @throws \Exception
+     * @return void
+     * @covers ::stadisticObservationVariance
+     */
+    public function teststadisticObservationVariance404(): void
+    {
+
+        $datos = [
+            'initial_time_stamp' => '3019-05-17 10:11:00-05',
+            'final_time_stamp'=>'3019-05-17 10:30:00-05',
+            'Id'=>'NO2QQQWQE',
+        ];
+        self::$client->request(
+            Request::METHOD_POST,
+            ApiObservationController::OBSERVATION_API_PATH . ApiObservationController::STADISTIC .ApiObservationController::VARIANCE,
+            [], [], [], json_encode($datos)
+        );
+        self::assertEquals(
+            Response::HTTP_NOT_FOUND,
+            self::$client->getResponse()->getStatusCode()
+        );
+
+    }
 
 }

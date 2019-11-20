@@ -309,6 +309,7 @@ class ApiObservationController extends AbstractController
         $observations = $query->getResult();
         $num_of_elements=count($observations);
         $arr = array();
+        $datos=[];
         if (!empty($observations)){
             for ($i = 0; $i < $num_of_elements; $i++){
                 if($observations[$i]['phenomenonId']=='CO'){
@@ -316,18 +317,19 @@ class ApiObservationController extends AbstractController
                 }
                 $arr[$i] = $observations[$i]['valor'];
             }
-        }
-        $variance = 0.0;
-        $average = array_sum($arr)/$num_of_elements;
-        foreach($arr as $i)
-        {
-            $variance += pow(($i - $average), 2);
-        }
-        $variance=(float)($variance/$num_of_elements);
-        $variance=number_format($variance,3);
+            $variance = 0.0;
+            $average = array_sum($arr)/$num_of_elements;
+            foreach($arr as $i)
+            {
+                $variance += pow(($i - $average), 2);
+            }
+            $variance=(float)($variance/$num_of_elements);
+            $variance=number_format($variance,3);
 
-        $datos = ['phenomenonId'=>$data['Id'],
-            'valor'=>$variance];
+            $datos = ['phenomenonId'=>$data['Id'],
+                'valor'=>$variance];
+        }
+
 
         return (empty($datos))
             ? $this->error404()
