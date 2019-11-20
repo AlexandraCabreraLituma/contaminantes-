@@ -299,7 +299,6 @@ class ApiObservationControllerTest extends WebTestCase
      * @return void
      * @covers ::stadisticObservationModa
      */
-
     public function testStadisticObservationModa200(): void
     {
 
@@ -350,6 +349,63 @@ class ApiObservationControllerTest extends WebTestCase
         );
 
     }
+    /**
+     * Implements teststadisticObservationStandardDesviation200
+     * @throws \Exception
+     * @return void
+     * @covers ::stadisticObservationStandardDesviation
+     */
+    public function teststadisticObservationStandardDesviation200(): void
+    {
+
+        $datos = [
+            'initial_time_stamp' => '2018-05-17 10:11:00-05',
+            'final_time_stamp'=>'2018-05-17 10:30:00-05',
+            'Id'=>'NO2',
+        ];
+
+        self::$client->request(
+            Request::METHOD_POST,
+            ApiObservationController::OBSERVATION_API_PATH . ApiObservationController::STADISTIC .ApiObservationController::STANDARD_DESVIATION,
+            [], [], [], json_encode($datos)
+        );
+        self::assertEquals(
+            Response::HTTP_OK,
+            self::$client->getResponse()->getStatusCode()
+        );
+        $cuerpo = self::$client->getResponse()->getContent();
+        $datosObservation = json_decode($cuerpo, true);
+
+        self::assertArrayHasKey('observations', $datosObservation);
+
+    }
+
+    /**
+     * Implements teststadisticObservationStandardDesviation404
+     * @throws \Exception
+     * @return void
+     * @covers ::stadisticObservationStandardDesviation
+     */
+    public function teststadisticObservationStandardDesviation404(): void
+    {
+
+        $datos = [
+            'initial_time_stamp' => '3019-05-17 10:11:00-05',
+            'final_time_stamp'=>'3019-05-17 10:30:00-05',
+            'Id'=>'NO2QQQWQE',
+        ];
+        self::$client->request(
+            Request::METHOD_POST,
+            ApiObservationController::OBSERVATION_API_PATH . ApiObservationController::STADISTIC .ApiObservationController::STANDARD_DESVIATION,
+            [], [], [], json_encode($datos)
+        );
+        self::assertEquals(
+            Response::HTTP_NOT_FOUND,
+            self::$client->getResponse()->getStatusCode()
+        );
+
+    }
+
 
 
 }

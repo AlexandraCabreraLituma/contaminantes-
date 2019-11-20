@@ -255,30 +255,31 @@ class ApiObservationController extends AbstractController
         $observations = $query->getResult();
         $num_of_elements=count($observations);
         $arr = array();
+        $datos=[];
+
         if (!empty($observations)){
+
             for ($i = 0; $i < $num_of_elements; $i++){
                 if($observations[$i]['phenomenonId']=='CO'){
                     $observations[$i]['valor']=$observations[$i]['valor']*1000;
                 }
                 $arr[$i] = $observations[$i]['valor'];
             }
+            $variance = 0.0;
+            // calculating mean using array_sum() method
+            $average = array_sum($arr)/$num_of_elements;
+            foreach($arr as $i)
+            {
+                // sum of squares of differences between
+                // all numbers and means.
+                $variance += pow(($i - $average), 2);
+            }
+            $standard_desviation=(float)sqrt($variance/$num_of_elements);
+            $standard_desviation=number_format($standard_desviation,3);
+            $datos = ['phenomenonId'=>$data['Id'],
+                'valor'=>$standard_desviation];
+
         }
-
-        $variance = 0.0;
-        // calculating mean using array_sum() method
-        $average = array_sum($arr)/$num_of_elements;
-        foreach($arr as $i)
-        {
-            // sum of squares of differences between
-            // all numbers and means.
-            $variance += pow(($i - $average), 2);
-        }
-        $standard_desviation=(float)sqrt($variance/$num_of_elements);
-        $standard_desviation=number_format($standard_desviation,3);
-
-        $datos = ['phenomenonId'=>$data['Id'],
-                  'valor'=>$standard_desviation];
-
         return (empty($datos))
             ? $this->error404()
             : new JsonResponse(
