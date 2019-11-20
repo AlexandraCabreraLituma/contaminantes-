@@ -31,7 +31,8 @@ class ApiObservationController extends AbstractController
     const GENERAL='/general';
     const MODA='/moda';
     const ICA='/ICA';
-    const STANDARD_DESVIATION='standardDesviation';
+    const STANDARD_DESVIATION='/standardDesviation';
+    const VARIANCE='/variance';
 
     /**
      * @param Request $request
@@ -284,6 +285,56 @@ class ApiObservationController extends AbstractController
                 ['observations'=>$datos],
                 Response::HTTP_OK);
     }
+
+    /**
+     * @param Request $request
+     * @return Response
+     * @Route(path="/stadistic/variance", name="stadistic_variance", methods={"POST"})
+     */
+    public function stadisticObservationVariance(Request $request): Response{
+        $em = $this->getDoctrine()->getManager();
+        $dataRequest = $request->getContent();
+        $data = json_decode($dataRequest, true);
+        $query = $em->createQuery('SELECT  observation.phenomenonId , observation.valor as valor
+                                     FROM App\Entity\Observation observation  
+                                     where observation.timeStamp>= :timeStampInitial 
+                                       and observation.timeStamp<= :timeStampFinal
+                                       and observation.phenomenonId LIKE :Id');
+        $query->setParameter('timeStampInitial',$data['initial_time_stamp']);
+        $query->setParameter('timeStampFinal',$data['final_time_stamp']);
+        $query->setParameter('Id','%'.$data['Id'].'%');
+
+        /** * @var Observation[] $observations */
+        $observations = $query->getResult();
+        $num_of_elements=count($observations);
+        $arr = array();
+        if (!empty($observations)){
+            for ($i = 0; $i < $num_of_elements; $i++){
+                if($observations[$i]['phenomenonId']=='CO'){
+                    $observations[$i]['valor']=$observations[$i]['valor']*1000;
+                }
+                $arr[$i] = $observations[$i]['valor'];
+            }
+        }
+        $variance = 0.0;
+        $average = array_sum($arr)/$num_of_elements;
+        foreach($arr as $i)
+        {
+            $variance += pow(($i - $average), 2);
+        }
+        $variance=(float)($variance/$num_of_elements);
+        $variance=number_format($variance,3);
+
+        $datos = ['phenomenonId'=>$data['Id'],
+            'valor'=>$variance];
+
+        return (empty($datos))
+            ? $this->error404()
+            : new JsonResponse(
+                ['observations'=>$datos],
+                Response::HTTP_OK);
+    }
+
 
 
     /**
