@@ -31,7 +31,8 @@ class ApiObservationController extends AbstractController
     const GENERAL='/general';
     const MODA='/moda';
     const ICA='/ICA';
-    const STANDARD_DESVIATION='standardDesviation';
+    const STANDARD_DESVIATION='/standardDesviation';
+    const VARIANCE='/variance';
 
     /**
      * @param Request $request
