@@ -810,9 +810,7 @@ class Metereologia implements \JsonSerializable
             'windspeed_max'     => $this->windspeedMax,
             'winddir_min'       => $this->winddirMin,
             'winddir_av'        => $this->windspeedAv,
-            'winddir_max'       => $this->winddirMax,
-
-
+            'winddir_max'       => $this->winddirMax
         );
 
     }
