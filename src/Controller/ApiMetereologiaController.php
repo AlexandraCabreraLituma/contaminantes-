@@ -84,6 +84,44 @@ class ApiMetereologiaController extends AbstractController
                 Response::HTTP_OK);
     }
 
+    /**
+     * @param Request $request
+     * @return Response
+     * @Route(path="/search", name="search_meteorology", methods={"POST"})
+     */
+    public function searchMetereology(Request $request): Response{
+        $em = $this->getDoctrine()->getManager();
+        $dataRequest = $request->getContent();
+        $data = json_decode($dataRequest, true);
+        $query = $em->createQuery('SELECT min(metereologia.tempaireMin) as tempaireMin, avg(metereologia.tempaireAv) as tempaireAv, max(metereologia.tempaireMax) as tempaireMax,
+                                          min(metereologia.patmMin) as patmMin, avg(metereologia.patmAv) as patmAv, max(metereologia.patmMax) as patmMax,
+                                          min(metereologia.hrMin) as hrMin, avg(metereologia.hrAv) as hrAv, max(metereologia.hrMax) as hrMax,
+                                          min(metereologia.radglobalMin) as radglobalMin, avg(metereologia.radglobalAv) as radglobalAv, max(metereologia.radglobalMax) as radglobalMax,   
+                                          min(metereologia.windSpeedMin) as windSpeedMin, avg(metereologia.windspeedAv) as windspeedAv, max(metereologia.windspeedMax) as windspeedMax,
+                                          sum(metereologia.precipSum) as precipSum
+                                          FROM App\Entity\Metereologia metereologia
+                                    where metereologia.fechor>= :timeStampInitial 
+                                    and metereologia.fechor<= :timeStampFinal');
+        $query->setParameter('timeStampInitial',$data['initial_time_stamp']);
+        $query->setParameter('timeStampFinal',$data['final_time_stamp']);
+        //min(metereologia.winddirMin) as winddirMin, avg(metereologia.winddirAv) as winddirAv, max(metereologia.winddirMax) as winddirMax
+        //  $metereologies[0]['winddirAv']=number_format($metereologies[0]['winddirAv'],3);
+        /** * @var Metereologia[] $metereologies */
+        $metereologies = $query->getResult();
+        if(!empty($metereologies)){
+            $metereologies[0]['tempaireAv']=number_format($metereologies[0]['tempaireAv'],3);
+            $metereologies[0]['patmAv']=number_format($metereologies[0]['patmAv'],3);
+            $metereologies[0]['hrAv']=number_format($metereologies[0]['hrAv'],3);
+            $metereologies[0]['radglobalAv']=number_format($metereologies[0]['radglobalAv'],3);
+            $metereologies[0]['windspeedAv']=number_format($metereologies[0]['windspeedAv'],3);
+
+        }
+        return (empty($metereologies))
+            ? $this->error404()
+            : new JsonResponse(
+                ['metereologies'=>$metereologies],
+                Response::HTTP_OK);
+    }
 
 
     /**
