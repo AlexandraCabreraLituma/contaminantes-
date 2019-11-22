@@ -32,7 +32,7 @@ class ApiMetereologiaController extends AbstractController
      * @return Response
      * @Route(path="/search/temperature", name="search_temperature", methods={"POST"})
      */
-    public function searchAdvanceObservation(Request $request): Response{
+    public function searchTemperatureMetereology(Request $request): Response{
         $em = $this->getDoctrine()->getManager();
         $dataRequest = $request->getContent();
         $data = json_decode($dataRequest, true);
@@ -43,12 +43,15 @@ class ApiMetereologiaController extends AbstractController
                                     ');
         $query->setParameter('timeStampInitial',$data['initial_time_stamp']);
         $query->setParameter('timeStampFinal',$data['final_time_stamp']);
-        /** * @var Metereologia[] $metereologias */
-        $metereologias = $query->getResult();
-        return (empty($metereologias))
+        /** * @var Metereologia[] $metereologies */
+        $metereologies = $query->getResult();
+        if(!empty($metereologies)){
+            $metereologies[0]['promedio']=number_format($metereologies[0]['promedio'],3);
+        }
+        return (empty($metereologies))
             ? $this->error404()
             : new JsonResponse(
-                ['metereologias'=>$metereologias],
+                ['metereologies'=>$metereologies],
                 Response::HTTP_OK);
     }
 
