@@ -40,16 +40,16 @@ class ApiMetereologiaController extends AbstractController
         $query = $em->createQuery('SELECT min(metereologia.tempaireMin) as minimo, avg(metereologia.tempaireAv) as promedio, max(metereologia.tempaireMax) as maximo 
                                     FROM App\Entity\Metereologia metereologia
                                     where metereologia.fechor>= :timeStampInitial 
-                                    and metereologia.fechor<= :timeStampFinal 
-                                    ');
+                                    and metereologia.fechor<= :timeStampFinal ');
         $query->setParameter('timeStampInitial',$data['initial_time_stamp']);
         $query->setParameter('timeStampFinal',$data['final_time_stamp']);
         /** * @var Metereologia[] $metereologies */
         $metereologies = $query->getResult();
-        if(!empty($metereologies)){
+
+      if(!empty($metereologies)){
             $metereologies[0]['promedio']=number_format($metereologies[0]['promedio'],3);
         }
-        return (empty($metereologies))
+        return (empty($metereologies[0]['minimo']))
             ? $this->error404()
             : new JsonResponse(
                 ['metereologies'=>$metereologies],
