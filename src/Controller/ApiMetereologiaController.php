@@ -27,6 +27,8 @@ class ApiMetereologiaController extends AbstractController
     const SEARCH='/search';
     const TEMPERATURE='/temperature';
     const PRESSURE='/pressure';
+    const WIND='/wind';
+    const DIRECTION='/direction';
 
     /**
      * @param Request $request
@@ -123,6 +125,36 @@ class ApiMetereologiaController extends AbstractController
                 Response::HTTP_OK);
     }
 
+    /**
+     * @param Request $request
+     * @return Response
+     * @Route(path="/search/wind/direction", name="search_wind_direction", methods={"POST"})
+     */
+    public function searchWindDirectionMetereology(Request $request): Response{
+        $em = $this->getDoctrine()->getManager();
+        $dataRequest = $request->getContent();
+        $data = json_decode($dataRequest, true);
+        $query = $em->createQuery('SELECT sum(metereologia.winddirAv) as suma, count(metereologia.winddirAv) as contador
+                                    FROM App\Entity\Metereologia metereologia
+                                    where metereologia.fechor>= :timeStampInitial 
+                                    and metereologia.fechor<= :timeStampFinal 
+                                    ');
+        $query->setParameter('timeStampInitial',$data['initial_time_stamp']);
+        $query->setParameter('timeStampFinal',$data['final_time_stamp']);
+        /** * @var Metereologia[] $metereologies */
+        $metereologies = $query->getResult();
+        $datos=[];
+        if(!is_null($metereologies[0]['suma'])){
+            $media=(float)($metereologies[0]['suma']/$metereologies[0]['contador']);
+            $media=number_format($media,0);
+            $datos = ['mediana'=>$media];
+        }
+        return (empty($datos))
+            ? $this->error404()
+            : new JsonResponse(
+                ['metereologies'=>$datos],
+                Response::HTTP_OK);
+    }
 
     /**
      * @return JsonResponse
