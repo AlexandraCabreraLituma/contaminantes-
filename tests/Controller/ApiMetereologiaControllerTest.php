@@ -204,5 +204,62 @@ class ApiMetereologiaControllerTest extends WebTestCase
 
     }
 
+    /**
+     * Implements testsearchWindDirectionMetereology200
+     * @throws \Exception
+     * @return void
+     * @covers ::searchWindDirectionMetereology
+     */
+    public function testsearchWindDirectionMetereology200(): void
+    {
+
+        $datos = [
+            'initial_time_stamp' => '2017-08-16 14:00:00',
+            'final_time_stamp' => '2017-08-16 16:00:00',
+        ];
+
+        self::$client->request(
+            Request::METHOD_POST,
+                ApiMetereologiaController::METEREOLOGIA_API_PATH . ApiMetereologiaController::SEARCH.
+                    ApiMetereologiaController::WIND. ApiMetereologiaController::DIRECTION  ,
+            [], [], [], json_encode($datos)
+        );
+        self::assertEquals(
+            Response::HTTP_OK,
+            self::$client->getResponse()->getStatusCode()
+        );
+        $cuerpo = self::$client->getResponse()->getContent();
+        $datosMeteorology = json_decode($cuerpo, true);
+
+        self::assertArrayHasKey('metereologies', $datosMeteorology);
+    }
+
+    /**
+     * Implements testsearchWindDirectionMetereology404
+     * @throws \Exception
+     * @return void
+     * @covers ::searchWindDirectionMetereology
+     */
+    public function testsearchWindDirectionMetereology404(): void
+    {
+
+        $datos = [
+            'initial_time_stamp' => '3019-05-17 10:11:00-05',
+            'final_time_stamp'=>'3019-04-17 10:30:00-05',
+        ];
+
+        self::$client->request(
+            Request::METHOD_POST,
+                ApiMetereologiaController::METEREOLOGIA_API_PATH . ApiMetereologiaController::SEARCH.
+                    ApiMetereologiaController::WIND. ApiMetereologiaController::DIRECTION  ,
+            [], [], [], json_encode($datos)
+        );
+        self::assertEquals(
+            Response::HTTP_NOT_FOUND,
+            self::$client->getResponse()->getStatusCode()
+        );
+
+    }
+
 
 }
