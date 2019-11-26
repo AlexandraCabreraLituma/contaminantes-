@@ -77,7 +77,7 @@ class ApiMetereologiaController extends AbstractController
         if(!empty($metereologies)){
             $metereologies[0]['promedio']=number_format($metereologies[0]['promedio'],3);
         }
-        return (empty($metereologies))
+        return (empty($metereologies[0]['minimo']))
             ? $this->error404()
             : new JsonResponse(
                 ['metereologies'=>$metereologies],
