@@ -116,7 +116,7 @@ class ApiMetereologiaController extends AbstractController
             $metereologies[0]['windspeedAv']=number_format($metereologies[0]['windspeedAv'],3);
 
         }
-        return (empty($metereologies))
+        return (empty($metereologies[0]['tempaireMin']))
             ? $this->error404()
             : new JsonResponse(
                 ['metereologies'=>$metereologies],

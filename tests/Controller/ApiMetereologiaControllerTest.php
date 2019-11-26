@@ -149,5 +149,60 @@ class ApiMetereologiaControllerTest extends WebTestCase
 
     }
 
+    /**
+     * Implements testsearchMetereology200
+     * @throws \Exception
+     * @return void
+     * @covers ::searchMetereology
+     */
+    public function testsearchMetereology200(): void
+    {
+
+        $datos = [
+            'initial_time_stamp' => '2017-08-16 14:00:00',
+            'final_time_stamp' => '2017-08-16 16:00:00',
+        ];
+
+        self::$client->request(
+            Request::METHOD_POST,
+            ApiMetereologiaController::METEREOLOGIA_API_PATH . ApiMetereologiaController::SEARCH ,
+            [], [], [], json_encode($datos)
+        );
+        self::assertEquals(
+            Response::HTTP_OK,
+            self::$client->getResponse()->getStatusCode()
+        );
+        $cuerpo = self::$client->getResponse()->getContent();
+        $datosMeteorology = json_decode($cuerpo, true);
+
+        self::assertArrayHasKey('metereologies', $datosMeteorology);
+    }
+
+    /**
+     * Implements testsearchMetereology404
+     * @throws \Exception
+     * @return void
+     * @covers ::searchMetereology
+     */
+    public function testsearchMetereology404(): void
+    {
+
+        $datos = [
+            'initial_time_stamp' => '3019-05-17 10:11:00-05',
+            'final_time_stamp'=>'3019-04-17 10:30:00-05',
+        ];
+
+        self::$client->request(
+            Request::METHOD_POST,
+            ApiMetereologiaController::METEREOLOGIA_API_PATH . ApiMetereologiaController::SEARCH ,
+            [], [], [], json_encode($datos)
+        );
+        self::assertEquals(
+            Response::HTTP_NOT_FOUND,
+            self::$client->getResponse()->getStatusCode()
+        );
+
+    }
+
 
 }
