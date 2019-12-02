@@ -72,11 +72,6 @@ class ApiObservationController extends AbstractController
         $query->setParameter('timeStampInitial',$data['initial_time_stamp']);
         $query->setParameter('timeStampFinal',$data['final_time_stamp']);
         $query->setParameter('Id','%'.$data['Id'].'%');
-        /*
-        $query->setParameter('COId','%'.$data['COId'].'%');
-        $query->setParameter('SO2Id','%'.$data['SO2Id'].'%');
-        $query->setParameter('PM2_5Id','%'.$data['PM2_5Id'].'%');
-        $query->setParameter('NO2Id','%'.$data['NO2Id'].'%');
         /** * @var Observation[] $observations */
         $observations = $query->getResult();
         if (!empty($observations)){
@@ -258,7 +253,6 @@ class ApiObservationController extends AbstractController
         $datos=[];
 
         if (!empty($observations)){
-
             for ($i = 0; $i < $num_of_elements; $i++){
                 if($observations[$i]['phenomenonId']=='CO'){
                     $observations[$i]['valor']=$observations[$i]['valor']*1000;
@@ -266,12 +260,9 @@ class ApiObservationController extends AbstractController
                 $arr[$i] = $observations[$i]['valor'];
             }
             $variance = 0.0;
-            // calculating mean using array_sum() method
             $average = array_sum($arr)/$num_of_elements;
             foreach($arr as $i)
             {
-                // sum of squares of differences between
-                // all numbers and means.
                 $variance += pow(($i - $average), 2);
             }
             $standard_desviation=(float)sqrt($variance/$num_of_elements);
@@ -329,17 +320,12 @@ class ApiObservationController extends AbstractController
             $datos = ['phenomenonId'=>$data['Id'],
                 'valor'=>$variance];
         }
-
-
         return (empty($datos))
             ? $this->error404()
             : new JsonResponse(
                 ['observations'=>$datos],
                 Response::HTTP_OK);
     }
-
-
-
     /**
      * @return JsonResponse
      ** @codeCoverageIgnore
