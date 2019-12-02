@@ -106,8 +106,6 @@ class ApiMetereologiaController extends AbstractController
                                     and metereologia.fechor<= :timeStampFinal');
         $query->setParameter('timeStampInitial',$data['initial_time_stamp']);
         $query->setParameter('timeStampFinal',$data['final_time_stamp']);
-        //min(metereologia.winddirMin) as winddirMin, avg(metereologia.winddirAv) as winddirAv, max(metereologia.winddirMax) as winddirMax
-        //  $metereologies[0]['winddirAv']=number_format($metereologies[0]['winddirAv'],3);
         /** * @var Metereologia[] $metereologies */
         $metereologies = $query->getResult();
         if(!empty($metereologies)){

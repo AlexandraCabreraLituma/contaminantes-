@@ -40,7 +40,6 @@ class ApiPhenOffController extends AbstractController
                                     FROM App\Entity\PhenOff phenOff 
                                     where phenOff.phenomenonId LIKE :Id');
         $query->setParameter('Id','%'.$phenomenonId.'%');
-
         /** * @var PhenOff[] $phenoff */
         $phenoff = $query->getResult();
         return (empty($phenoff))
@@ -67,10 +66,7 @@ class ApiPhenOffController extends AbstractController
             ? $this->error404()
             : new JsonResponse(['phenoff'=> $phenoff],
                 Response::HTTP_OK);
-
     }
-
-
     /**
      * @return JsonResponse
      ** @codeCoverageIgnore

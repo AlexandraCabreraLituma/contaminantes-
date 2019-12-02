@@ -60,9 +60,7 @@ class ApiParametrosController extends AbstractController
                 'valor' => $parametros[0]['contaminante'],
                 'rango' => $parametros[0]['rango'],
                 'color' => $parametros[0]['color']];
-
-        }
-
+       }
           return (empty($datos))
             ? $this->error404()
             : new JsonResponse(
