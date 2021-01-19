@@ -49,12 +49,56 @@
           }
         }
       }
+    },
+    "/phenoff/{phenOffId}": {
+      "get": {
+        "tags": [
+          "PhenOff"
+        ],
+        "summary": "Returns a phenoff based on a single ID",
+        "description": "Returns the estacion identified by `phenOffId`.",
+        "operationId": "ica_get_phenoff_id",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/phenOffId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "PhenOff",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PhenOff"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PhenOff"
+                }
+              },
+              "application/x-yaml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PhenOff"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404_Resource_Not_Found_Response"
+          }
+        }
+      }
     }
   },
   "tags": [
     {
       "name": "Estacion",
       "description": "Estacion management"
+    },
+    {
+      "name": "PhenOff",
+      "description": "PhenOff management"
     }
   ],
   "servers": [
@@ -72,6 +116,15 @@
         "schema": {
           "type": "integer",
           "format": "int32"
+        }
+      },
+      "phenOffId": {
+        "name": "phenOffId",
+        "in": "path",
+        "description": "ID of phenOff",
+        "required": true,
+        "schema": {
+          "type": "string"
         }
       }
     },
@@ -142,6 +195,37 @@
             "id": 1508,
             "estacionnombre": "Estacion nombre",
             "ubicacion": "Estacion ubicacion"
+          }
+        }
+      },
+      "PhenOff": {
+        "required": [
+          "phenomenon_id"
+        ],
+        "properties": {
+          "phenomenon_id": {
+            "description": "PhenOff Id",
+            "type": "string"
+          },
+          "unidad": {
+            "description": "PhenOff unidad",
+            "type": "string"
+          },
+          "peso_molecular": {
+            "description": "PhenOff peso molecular",
+            "type": "string"
+          },
+          "sensor": {
+            "description": "PhenOff sensor",
+            "type": "string"
+          }
+        },
+        "example": {
+          "PhenOff": {
+            "phenOffId": 1508,
+            "unidad": "PhenOff Id",
+            "peso_molecular": "PhenOff unidad",
+            "sensor": "PhenOff sensor"
           }
         }
       },
