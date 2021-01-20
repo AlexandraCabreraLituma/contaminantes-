@@ -56,8 +56,48 @@
           "PhenOff"
         ],
         "summary": "Returns a phenoff based on a single ID",
-        "description": "Returns the estacion identified by `phenOffId`.",
+        "description": "Returns the phenoff identified by `phenOffId`.",
         "operationId": "ica_get_phenoff_id",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/phenOffId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "PhenOff",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PhenOff"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PhenOff"
+                }
+              },
+              "application/x-yaml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PhenOff"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404_Resource_Not_Found_Response"
+          }
+        }
+      }
+    },
+    "/phenoff/weightPolar/{phenOffId}": {
+      "get": {
+        "tags": [
+          "PhenOff"
+        ],
+        "summary": "Returns a phenoff based on a single ID",
+        "description": "Returns the phenoff identified by `phenOffId`.",
+        "operationId": "ica_get_phenoff_weightPolar_id",
         "parameters": [
           {
             "$ref": "#/components/parameters/phenOffId"
