@@ -73,6 +73,7 @@ class ApiPhenOffController extends AbstractController
      */
     private function error404() : JsonResponse
     {
+
         $mensaje=[
             'code'=> Response::HTTP_NOT_FOUND,
             'mensaje' => 'Not found resource not found'
@@ -81,6 +82,7 @@ class ApiPhenOffController extends AbstractController
             $mensaje,
             Response::HTTP_NOT_FOUND
         );
+
     }
 
 }
