@@ -129,6 +129,57 @@
           }
         }
       }
+    },
+    "/parametros/search/contaminante": {
+      "post": {
+        "tags": [
+          "Parametros"
+        ],
+        "summary": "Search advance parameters",
+        "description": "Search advance parameters",
+        "operationId": "ica_search_contaminante_parametros",
+        "responses": {
+          "200": {
+            "description": "Parametros",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Parametros"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Parametros"
+                }
+              },
+              "application/x-yaml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Parametros"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404_Resource_Not_Found_Response"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ParametrosSearchData"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/ParametrosSearchData"
+              }
+            }
+          },
+          "description": "`Parametros` properties to add to the system",
+          "required": true
+        }
+      }
     }
   },
   "tags": [
@@ -139,6 +190,10 @@
     {
       "name": "PhenOff",
       "description": "PhenOff management"
+    },
+    {
+      "name": "Parametros",
+      "description": "Parametros management"
     }
   ],
   "servers": [
@@ -266,6 +321,62 @@
             "unidad": "PhenOff Id",
             "peso_molecular": "PhenOff unidad",
             "sensor": "PhenOff sensor"
+          }
+        }
+      },
+      "ParametrosSearchData": {
+        "required": [
+          "contaminanteId",
+          "valor"
+        ],
+        "properties": {
+          "contaminanteId": {
+            "description": "Phenomenon Id",
+            "type": "string"
+          },
+          "valor": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "example": {
+          "contaminanteId": "CO",
+          "valor": 30
+        }
+      },
+      "Parametros": {
+        "properties": {
+          "contaminante": {
+            "description": "Phenomenon Id",
+            "type": "string"
+          },
+          "valor": {
+            "type": "string"
+          },
+          "rango": {
+            "type": "string"
+          },
+          "color": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "Parametros": {
+            "contaminante": "CO",
+            "valor": 21,
+            "rango": "BUENO",
+            "color": null
+          }
+        }
+      },
+      "ParametrosArray": {
+        "properties": {
+          "parametros": {
+            "description": "Parametros array",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Parametros"
+            }
           }
         }
       },
