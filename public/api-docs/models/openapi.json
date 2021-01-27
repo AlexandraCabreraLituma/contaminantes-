@@ -288,7 +288,7 @@
         "example": {
           "estacion": {
             "id": 1508,
-            "estacionnombre": "Estacion nombre",
+            "estacionnombre": "Estacion nombre ",
             "ubicacion": "Estacion ubicacion"
           }
         }
