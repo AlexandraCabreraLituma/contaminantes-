@@ -231,6 +231,57 @@
           "required": true
         }
       }
+    },
+    "/observations/search/contaminante": {
+      "post": {
+        "tags": [
+          "Observations"
+        ],
+        "summary": "Search advance observations",
+        "description": "Search advance observations",
+        "operationId": "ica_search_observations_contaminante",
+        "responses": {
+          "200": {
+            "description": "ObservationsSearchContaminante",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObservationsSearchContaminanteArray"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObservationsSearchContaminanteArray"
+                }
+              },
+              "application/x-yaml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObservationsSearchContaminanteArray"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404_Resource_Not_Found_Response"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ObservationsSearchData"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/ObservationsSearchData"
+              }
+            }
+          },
+          "description": "`ObservationSearch` properties to add to the system",
+          "required": true
+        }
+      }
     }
   },
   "tags": [
@@ -429,6 +480,31 @@
           }
         }
       },
+      "ObservationsSearchContaminante": {
+        "properties": {
+          "phenomenonId": {
+            "type": "string"
+          },
+          "timeStamp": {
+            "type": "array"
+          },
+          "valor": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "example": {
+          "ObservationsSearchContaminante": {
+            "phenomenonId": "O3",
+            "timeStamp": {
+              "date": "2018-05-17 10:11:00.000000",
+              "timezone_type": 1,
+              "timezone": "-05:00"
+            },
+            "valor": 18.76
+          }
+        }
+      },
       "ParametrosSearchData": {
         "required": [
           "contaminanteId",
@@ -479,6 +555,17 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/ObservationsSearch"
+            }
+          }
+        }
+      },
+      "ObservationsSearchContaminanteArray": {
+        "properties": {
+          "ObservationsSearchContaminante": {
+            "description": "Observation array",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ObservationsSearchContaminante"
             }
           }
         }
