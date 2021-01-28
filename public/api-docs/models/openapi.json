@@ -180,6 +180,57 @@
           "required": true
         }
       }
+    },
+    "/observations/search": {
+      "post": {
+        "tags": [
+          "Observations"
+        ],
+        "summary": "Search advance observations",
+        "description": "Search advance observations",
+        "operationId": "ica_search_observations",
+        "responses": {
+          "200": {
+            "description": "ObservationSearch",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObservationsSearchArray"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObservationsSearchArray"
+                }
+              },
+              "application/x-yaml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObservationsSearchArray"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404_Resource_Not_Found_Response"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ObservationsSearchData"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/ObservationsSearchData"
+              }
+            }
+          },
+          "description": "`ObservationSearch` properties to add to the system",
+          "required": true
+        }
+      }
     }
   },
   "tags": [
@@ -194,6 +245,10 @@
     {
       "name": "Parametros",
       "description": "Parametros management"
+    },
+    {
+      "name": "Observations",
+      "description": "Observations management"
     }
   ],
   "servers": [
@@ -324,26 +379,6 @@
           }
         }
       },
-      "ParametrosSearchData": {
-        "required": [
-          "contaminanteId",
-          "valor"
-        ],
-        "properties": {
-          "contaminanteId": {
-            "description": "Phenomenon Id",
-            "type": "string"
-          },
-          "valor": {
-            "type": "integer",
-            "format": "int32"
-          }
-        },
-        "example": {
-          "contaminanteId": "CO",
-          "valor": 30
-        }
-      },
       "Parametros": {
         "properties": {
           "contaminante": {
@@ -369,13 +404,81 @@
           }
         }
       },
-      "ParametrosArray": {
+      "ObservationsSearch": {
         "properties": {
-          "parametros": {
-            "description": "Parametros array",
+          "timeStamp": {
+            "type": "array"
+          },
+          "phenomenonId": {
+            "type": "string"
+          },
+          "valor": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "example": {
+          "ObservationsSearch": {
+            "timeStamp": {
+              "date": "2018-05-17 10:11:00.000000",
+              "timezone_type": 1,
+              "timezone": "-05:00"
+            },
+            "phenomenonId": "urn:ogc:def:phenomenon:OGC:1.0.30:O3",
+            "valor": 18.7594803046
+          }
+        }
+      },
+      "ParametrosSearchData": {
+        "required": [
+          "contaminanteId",
+          "valor"
+        ],
+        "properties": {
+          "contaminanteId": {
+            "description": "Phenomenon Id",
+            "type": "string"
+          },
+          "valor": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "example": {
+          "contaminanteId": "CO",
+          "valor": 30
+        }
+      },
+      "ObservationsSearchData": {
+        "required": [
+          "initial_time_stamp",
+          "final_time_stamp",
+          "Id"
+        ],
+        "properties": {
+          "initial_time_stamp": {
+            "type": "string"
+          },
+          "final_time_stamp": {
+            "type": "string"
+          },
+          "Id": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "initial_time_stamp": "2018-05-17 10:11:00-05",
+          "final_time_stamp": "2018-05-17 10:50:00-05",
+          "Id": "O3"
+        }
+      },
+      "ObservationsSearchArray": {
+        "properties": {
+          "ObservationsSearch": {
+            "description": "Observation array",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Parametros"
+              "$ref": "#/components/schemas/ObservationsSearch"
             }
           }
         }
