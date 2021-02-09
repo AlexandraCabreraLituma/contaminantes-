@@ -282,6 +282,57 @@
           "required": true
         }
       }
+    },
+    "/observations/stadistic/general": {
+      "post": {
+        "tags": [
+          "Observations"
+        ],
+        "summary": "Search advance observations",
+        "description": "Search advance observations",
+        "operationId": "ica_stadictis_ general_contaminante",
+        "responses": {
+          "200": {
+            "description": "ObservationsSearchContaminante",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObservationsStadisticsGeneralArray"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObservationsStadisticsGeneralArray"
+                }
+              },
+              "application/x-yaml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObservationsStadisticsGeneralArray"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404_Resource_Not_Found_Response"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ObservationsStadisticsGeneralData"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/ObservationsStadisticsGeneralData"
+              }
+            }
+          },
+          "description": "`ObservationSearch` properties to add to the system",
+          "required": true
+        }
+      }
     }
   },
   "tags": [
@@ -505,6 +556,37 @@
           }
         }
       },
+      "ObservationsStadisticsGeneral": {
+        "required": [
+          "phenomenonId",
+          "maximo",
+          "minimo",
+          "promedio"
+        ],
+        "properties": {
+          "phenomenonId": {
+            "type": "string"
+          },
+          "maximo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "minimo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "promedio": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "example": {
+          "phenomenonId": "urn:ogc:def:phenomenon:OGC:1.0.30:SO2",
+          "maximo": 26.6751036532,
+          "minimo": 18.5733297548,
+          "promedio": 23.31629777748
+        }
+      },
       "ParametrosSearchData": {
         "required": [
           "contaminanteId",
@@ -548,6 +630,49 @@
           "Id": "O3"
         }
       },
+      "ObservationsStadisticsGeneralData": {
+        "required": [
+          "initial_time_stamp",
+          "final_time_stamp",
+          "O3Id",
+          "SO2Id",
+          "PM2_5Id",
+          "COId",
+          "NO2Id"
+        ],
+        "properties": {
+          "initial_time_stamp": {
+            "type": "string"
+          },
+          "final_time_stamp": {
+            "type": "string"
+          },
+          "O3Id": {
+            "type": "string"
+          },
+          "SO2Id": {
+            "type": "string"
+          },
+          "PM2_5Id": {
+            "type": "string"
+          },
+          "COId": {
+            "type": "string"
+          },
+          "NO2Id": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "initial_time_stamp": "2018-05-17 10:11:00-05",
+          "final_time_stamp": "2018-05-17 10:50:00-05",
+          "O3Id": "O3",
+          "SO2Id": "SO2",
+          "PM2_5Id": "PM2_5",
+          "COId": "CO",
+          "NO2Id": "NO2"
+        }
+      },
       "ObservationsSearchArray": {
         "properties": {
           "ObservationsSearch": {
@@ -566,6 +691,17 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/ObservationsSearchContaminante"
+            }
+          }
+        }
+      },
+      "ObservationsStadisticsGeneralArray": {
+        "properties": {
+          "ObservationsStadisticsGeneral": {
+            "description": "Observation stadtics array",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ObservationsStadisticsGeneral"
             }
           }
         }
