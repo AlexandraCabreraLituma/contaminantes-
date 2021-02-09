@@ -278,7 +278,7 @@
               }
             }
           },
-          "description": "`ObservationSearch` properties to add to the system",
+          "description": "`ObservationsSearchContaminante` properties to add to the system",
           "required": true
         }
       }
@@ -290,7 +290,7 @@
         ],
         "summary": "Search advance observations",
         "description": "Search advance observations",
-        "operationId": "ica_stadictis_ general_contaminante",
+        "operationId": "ica_stadictis_general_contaminante",
         "responses": {
           "200": {
             "description": "ObservationsSearchContaminante",
@@ -329,7 +329,58 @@
               }
             }
           },
-          "description": "`ObservationSearch` properties to add to the system",
+          "description": "`ObservationsSearchContaminante` properties to add to the system",
+          "required": true
+        }
+      }
+    },
+    "/observations/search/ICA": {
+      "post": {
+        "tags": [
+          "Observations"
+        ],
+        "summary": "Search advance observations",
+        "description": "Search advance ica observations",
+        "operationId": "ica_search_ICA_contaminante",
+        "responses": {
+          "200": {
+            "description": "ObservationsSearchICA",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObservationsSearchICAArray"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObservationsSearchICAArray"
+                }
+              },
+              "application/x-yaml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObservationsSearchICAArray"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404_Resource_Not_Found_Response"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ObservationsSearchICAData"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/ObservationsSearchICAData"
+              }
+            }
+          },
+          "description": "`ObservationsSearchICA` properties to add to the system",
           "required": true
         }
       }
@@ -587,6 +638,25 @@
           "promedio": 23.31629777748
         }
       },
+      "ObservationsSearchICA": {
+        "required": [
+          "phenomenonId",
+          "promedio"
+        ],
+        "properties": {
+          "phenomenonId": {
+            "type": "string"
+          },
+          "promedio": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "example": {
+          "phenomenonId": "urn:ogc:def:phenomenon:OGC:1.0.30:SO2",
+          "promedio": 23.31629777748
+        }
+      },
       "ParametrosSearchData": {
         "required": [
           "contaminanteId",
@@ -673,6 +743,24 @@
           "NO2Id": "NO2"
         }
       },
+      "ObservationsSearchICAData": {
+        "required": [
+          "initial_time_stamp",
+          "final_time_stamp"
+        ],
+        "properties": {
+          "initial_time_stamp": {
+            "type": "string"
+          },
+          "final_time_stamp": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "initial_time_stamp": "2018-05-17 10:11:00-05",
+          "final_time_stamp": "2018-05-17 10:50:00-05"
+        }
+      },
       "ObservationsSearchArray": {
         "properties": {
           "ObservationsSearch": {
@@ -702,6 +790,17 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/ObservationsStadisticsGeneral"
+            }
+          }
+        }
+      },
+      "ObservationsSearchICAArray": {
+        "properties": {
+          "ObservationsSearchICA": {
+            "description": "Observation stadtics array",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ObservationsSearchICA"
             }
           }
         }
