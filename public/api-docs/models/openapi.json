@@ -384,6 +384,41 @@
           "required": true
         }
       }
+    },
+    "/observations/maxHour": {
+      "get": {
+        "tags": [
+          "Observations"
+        ],
+        "summary": "Returns a max hour",
+        "description": "Returns the max hour",
+        "operationId": "ica_get_max_hour_observation",
+        "responses": {
+          "200": {
+            "description": "MaxHour",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MaxHour"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/MaxHour"
+                }
+              },
+              "application/x-yaml": {
+                "schema": {
+                  "$ref": "#/components/schemas/MaxHour"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404_Resource_Not_Found_Response"
+          }
+        }
+      }
     }
   },
   "tags": [
@@ -554,6 +589,18 @@
             "valor": 21,
             "rango": "BUENO",
             "color": null
+          }
+        }
+      },
+      "MaxHour": {
+        "properties": {
+          "maxHour": {
+            "type": "array"
+          }
+        },
+        "example": {
+          "observations": {
+            "maxHour": "2016-05-17 10:30:00-05"
           }
         }
       },
